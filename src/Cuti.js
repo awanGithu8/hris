@@ -9,8 +9,11 @@ function Cuti() {
     dataSource.push({
       key: i,
       name: 'John ' + i,
-      age: 42,
-      address: '10 Downing Street',
+      from_date: '2019-09-20',
+      to_date: '2019-09-20',
+      total_days: 1,
+      work_date: '2019-09-21',
+      reason: "Interview Kerja"
     });
   }
 
@@ -21,14 +24,29 @@ function Cuti() {
       key: 'name',
     },
     {
-      title: 'Age',
-      dataIndex: 'age',
-      key: 'age',
+      title: 'From Date',
+      dataIndex: 'from_date',
+      key: 'from_date',
     },
     {
-      title: 'Address',
-      dataIndex: 'address',
-      key: 'address',
+      title: 'To Date',
+      dataIndex: 'to_date',
+      key: 'to_date',
+    },
+    {
+      title: 'Total Days',
+      dataIndex: 'total_days',
+      key: 'total_days',
+    },
+    {
+      title: 'Working Date again',
+      dataIndex: 'work_date',
+      key: 'work_date',
+    },
+    {
+      title: 'Reason',
+      dataIndex: 'reason',
+      key: 'reason',
     },
   ];
 
