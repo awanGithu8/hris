@@ -8,6 +8,7 @@ import Employee from './Employee';
 import Division from './Division';
 import Cuti from './Cuti';
 import Approval from './Approval';
+import RequestCuti from './RequestCuti';
 
 import { Route, HashRouter } from "react-router-dom";
 

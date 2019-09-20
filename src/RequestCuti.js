@@ -2,7 +2,7 @@ import React from 'react';
 
 function RequestCuti() {
   return (
-    <div>RequestCuti</div>
+    <center><h3>Request Cuti</h3></center>
   );
 }
 
