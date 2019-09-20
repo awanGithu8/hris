@@ -47,9 +47,9 @@ function Layout(props) {
                 </span>
               }
             >
-              <Menu.Item key="user">User</Menu.Item>
-              <Menu.Item key="employee">Employee</Menu.Item>
-              <Menu.Item key="division">Division</Menu.Item>
+              <Menu.Item key="user"><NavLink to="/user">User</NavLink></Menu.Item>
+              <Menu.Item key="employee"><NavLink to="/employee">Employee</NavLink></Menu.Item>
+              <Menu.Item key="division"><NavLink to="/division">Division</NavLink></Menu.Item>
             </SubMenu>
 
             <SubMenu
@@ -62,7 +62,7 @@ function Layout(props) {
               }
             >
               <Menu.Item key="pengajuan_cuti"><NavLink to="/cuti">Pengajuan Cuti</NavLink></Menu.Item>
-              <Menu.Item key="approval">Approval</Menu.Item>
+              <Menu.Item key="approval"><NavLink to="/approval">Approval</NavLink></Menu.Item>
             </SubMenu>
 
             <SubMenu
