@@ -10,6 +10,7 @@ function Cuti() {
     data.push({
       key: i,
       name: 'John ' + i,
+      type: 'Tahunan/Khusus/Sakit',
       from_date: '2019-09-20',
       to_date: '2019-09-20',
       total_days: i+1,
@@ -28,6 +29,11 @@ function Cuti() {
       dataIndex: 'name',
       key: 'name',
       sorter: (a, b) => a.name.length - b.name.length,
+    },
+    {
+      title: 'Type',
+      dataIndex: 'type',
+      key: 'type',
     },
     {
       title: 'From Date',
