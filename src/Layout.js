@@ -80,7 +80,9 @@ function Layout(props) {
           </Menu>          
         </Col>
         <Col span={20}>
-          {props.children}
+          <div className="content">          
+            {props.children}
+          </div>
         </Col>
       </Row>
   );
