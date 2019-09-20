@@ -11,3 +11,15 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
 }
+
+.login-form {
+  background-color:ghostwhite;
+}
+
+.login-form h1{
+  color: #1890ff;
+}
+
+.login-form-button {
+  width: 100%;
+}
