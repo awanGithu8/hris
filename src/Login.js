@@ -49,7 +49,12 @@ function Login({ form }) {
             </Form>
         )
     }
-    return(<div>Already Logged In</div>);
+    return(<div>
+        <center>Santuy Human Resources Information System</center> 
+        <br/><br/>
+        Welcome %username%,
+
+    </div>);
 }
 
 const LoginForm = Form.create({ name: 'normal_login' })(Login);
