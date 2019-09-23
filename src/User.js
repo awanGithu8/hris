@@ -2,7 +2,8 @@ import React, { useState, useEffect } from 'react';
 
 import { Table, Input, Button, Row, Col, Divider, Icon, Tooltip, Modal, Form, Select } from 'antd';
 
-const {Option} = Select;
+const { Option } = Select;
+const { confirm } = Modal;
 
 function User({
   form
@@ -44,13 +45,15 @@ function User({
       render: (text, record) => (
         <span>
           <Tooltip title="Edit User">
-            <Button onClick={() => onClickEdit(record)}>
+            <Button type="primary" onClick={() => onClickEdit(record)}>
               <Icon type="edit" />
             </Button>
           </Tooltip>
           <Divider type="vertical" />
           <Tooltip title="Delete User">
-            <Button><Icon type="delete" /></Button>
+            <Button type="danger" onClick={() => onClickDelete(record)}>
+              <Icon type="delete" />
+            </Button>
           </Tooltip>
         </span>
       )
@@ -87,6 +90,24 @@ function User({
 
     setModalUserVisible(true);
   }
+
+  function onClickDelete(record){
+    confirm({
+      title: 'Are you sure delete this user?',
+      content: 'When user deleted you can\'t get it back',
+      okText: 'Yes',
+      okType: 'danger',
+      cancelText: 'No',
+      onOk() {
+        console.log('OK');
+      },
+      onCancel() {
+        console.log('Cancel');
+      },
+    });
+  }
+
+  
 
   function handleSubmit() {
 
