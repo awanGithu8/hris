@@ -13,18 +13,21 @@ function User({
   const [modalTitle, setModalTitle] = useState("");
   const [modalData, setModalData] = useState("");
 
-  const data = [];
-  for (let i = 0; i < 25; i++) {
-    data.push({
-      key: i,
-      username: 'John ' + i,
-      role: 'Administrator'
-    });
-  }
+  const [data, setData] = useState([]);
 
   useEffect(() => {
-    setdataSource(data);
+    fetch('http://localhost:3001/api/getData')
+    .then((data) => data.json())
+    .then((res) => 
+      setDataNeed(res.data)
+    )
   }, [])
+
+  function setDataNeed(data){
+    setdataSource(data);
+    setData(data);
+  }
+
 
   const columns = [
     {
@@ -61,9 +64,13 @@ function User({
   ];
 
   function searchData(e) {
+    console.log(e.target.value);
+    console.log(data);
     let dataFilter = data.filter(function (d) {
       return (
         d.username.toLowerCase().includes(e.target.value.toLowerCase())
+        ||
+        d.role.toLowerCase().includes(e.target.value.toLowerCase())
       )
     })
     setdataSource(dataFilter);
@@ -192,7 +199,7 @@ function User({
         dataSource={dataSource}
         columns={columns}
         pagination={{ defaultPageSize: 6, showSizeChanger: false }}
-
+        rowKey="_id" 
       />
     </React.Fragment>
   );

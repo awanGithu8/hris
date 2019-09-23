@@ -64,16 +64,16 @@ router.delete('/deleteData', (req, res) => {
 router.post('/putData', (req, res) => {
   let data = new Data();
 
-  const { id, message } = req.body;
+  const { username, role } = req.body;
 
-  if ((!id && id !== 0) || !message) {
+  if (username == "" && role == "") {
     return res.json({
       success: false,
       error: 'INVALID INPUTS',
     });
   }
-  data.message = message;
-  data.id = id;
+  data.username = username;
+  data.role = role;
   data.save((err) => {
     if (err) return res.json({ success: false, error: err });
     return res.json({ success: true });
