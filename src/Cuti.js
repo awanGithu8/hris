@@ -76,7 +76,7 @@ function Cuti() {
 
   return (
     <React.Fragment>
-      <center><h3>Daftar Cuti</h3></center>
+      <center><h3>Permit List</h3></center>
       <Row>
         <Col span={22}>
           <Input 

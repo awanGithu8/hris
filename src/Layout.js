@@ -61,9 +61,9 @@ function Layout(props) {
                 </span>
               }
             >
-              <Menu.Item key="daftar_cuti"><NavLink to="/cuti">Daftar Cuti</NavLink></Menu.Item>
-              <Menu.Item key="pengajuan_cuti"><NavLink to="/add_cuti">Pengajuan Cuti</NavLink></Menu.Item>
-              <Menu.Item key="approval"><NavLink to="/approval">Approval</NavLink></Menu.Item>
+              <Menu.Item key="daftar_cuti"><NavLink to="/cuti">Permit List</NavLink></Menu.Item>
+              <Menu.Item key="pengajuan_cuti"><NavLink to="/add_cuti">Permit Request</NavLink></Menu.Item>
+              <Menu.Item key="approval"><NavLink to="/approval">Permit Approval</NavLink></Menu.Item>
             </SubMenu>
 
             <SubMenu
