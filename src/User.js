@@ -86,7 +86,14 @@ function User({
   function handleOk() {
     validateFieldsAndScroll((errors, values) => {
       if(!errors){
-        axios.post('http://localhost:3001/api/putData', values);
+        if(modalData == ""){ // Add New Data
+          axios.post('http://localhost:3001/api/putData', values);
+        }else{
+          axios.post('http://localhost:3001/api/updateData', {
+            id: modalData["_id"],
+            update: values,
+          });
+        }
         setModalUserVisible(false);
         refreshData();
       }else{
@@ -96,6 +103,7 @@ function User({
   }
 
   function handleCancel() {
+    setModalData("");
     setModalUserVisible(false);
   }
 
@@ -133,15 +141,6 @@ function User({
       },
     });
   }
-
-  function updateData(){
-    // Next Lanjutin dari sini brow
-    // axios.post('http://localhost:3001/api/updateData', {
-    //   id: objIdToUpdate,
-    //   update: { message: updateToApply },
-    // });
-  }
-
   
   const { getFieldDecorator, validateFieldsAndScroll } = form;
 
@@ -158,6 +157,7 @@ function User({
         <Form className="login-form">
           <Form.Item>
             {getFieldDecorator('username', {
+              initialValue: modalData?modalData.username:"",
               rules: [{ required: true, message: 'Please input your username!' }],
             })(
               <Input
@@ -168,6 +168,7 @@ function User({
           </Form.Item>
           <Form.Item>
             {getFieldDecorator('role', {
+               initialValue: modalData?modalData.role:"",
               rules: [{ required: true, message: 'Please Select Role' }],
             })(
               <Select placeholder="Role">
