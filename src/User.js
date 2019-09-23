@@ -70,7 +70,15 @@ function User({
   }
 
   function handleOk() {
-    setModalUserVisible(false);
+    validateFieldsAndScroll((errors, values) => {
+      if(!errors){
+        console.log(values);
+      }else{
+        console.log(errors);
+      }
+    });
+
+    // setModalUserVisible(false);
   }
 
   function handleCancel() {
@@ -113,7 +121,7 @@ function User({
 
   }
 
-  const { getFieldDecorator } = form;
+  const { getFieldDecorator, validateFieldsAndScroll } = form;
 
   return (
 
@@ -123,6 +131,7 @@ function User({
         visible={ModalUserVisible}
         onOk={handleOk}
         onCancel={handleCancel}
+        destroyOnClose={true}
       >
         <Form onSubmit={handleSubmit} className="login-form">
           <Form.Item>
