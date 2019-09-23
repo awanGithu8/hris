@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
-import { Table, Input, Button, Row, Col, Divider, Icon, Tooltip, Modal, Form, Select } from 'antd';
+import { Table, Input, Button, Row, Col, Divider, Icon, Tooltip, Modal, Form, Select, Spin } from 'antd';
 
 import axios from 'axios';
 
@@ -14,8 +14,9 @@ function User({
   const [ModalUserVisible, setModalUserVisible] = useState(false);
   const [modalTitle, setModalTitle] = useState("");
   const [modalData, setModalData] = useState("");
-
   const [data, setData] = useState([]);
+
+  const [firstLoad, setFirstLoad] = useState(true)
 
   const columns = [
     {
@@ -66,6 +67,7 @@ function User({
   function setDataNeed(data){
     setdataSource(data);
     setData(data);
+    setFirstLoad(false);
   }
 
   function searchData(e) {
@@ -134,17 +136,17 @@ function User({
 
   function updateData(){
     // Next Lanjutin dari sini brow
-    axios.post('http://localhost:3001/api/updateData', {
-      id: objIdToUpdate,
-      update: { message: updateToApply },
-    });
+    // axios.post('http://localhost:3001/api/updateData', {
+    //   id: objIdToUpdate,
+    //   update: { message: updateToApply },
+    // });
   }
 
   
   const { getFieldDecorator, validateFieldsAndScroll } = form;
 
-  return (
-
+  if(!firstLoad){
+    return(
     <React.Fragment>
       <Modal
         title={modalTitle}
@@ -215,7 +217,18 @@ function User({
         rowKey="_id" 
       />
     </React.Fragment>
-  );
+    );
+  }else{
+    return (
+      <div style={{marginTop: "35vh"}}>
+        <center>
+          <Spin size="large" />
+          <p>Load user data</p>
+        </center>
+      </div>
+    );
+  }
+
 }
 
 const UserForm = Form.create({ name: 'user' })(User);

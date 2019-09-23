@@ -66,7 +66,7 @@ function Layout(props) {
               <Menu.Item key="approval"><NavLink to="/approval">Permit Approval</NavLink></Menu.Item>
             </SubMenu>
 
-            <SubMenu
+            {/* <SubMenu
               key="sub3"
               title={
                 <span>
@@ -74,9 +74,9 @@ function Layout(props) {
                   <span>Configurations</span>
                 </span>
               }
-            >
-              <Menu.Item key="logout"><NavLink to="/">Logout</NavLink></Menu.Item>
-            </SubMenu>
+            > */}
+              <Menu.Item key="logout"><NavLink to="/"><Icon type="logout" /> Logout</NavLink></Menu.Item>
+            {/* </SubMenu> */}
           </Menu>          
         </Col>
         <Col span={20}>
