@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 
 import { Table, Input, Button, Row, Col, Divider, Icon, Tooltip, Modal, Form, Select } from 'antd';
 
+import axios from 'axios';
+
 const { Option } = Select;
 const { confirm } = Modal;
 
@@ -14,20 +16,6 @@ function User({
   const [modalData, setModalData] = useState("");
 
   const [data, setData] = useState([]);
-
-  useEffect(() => {
-    fetch('http://localhost:3001/api/getData')
-    .then((data) => data.json())
-    .then((res) => 
-      setDataNeed(res.data)
-    )
-  }, [])
-
-  function setDataNeed(data){
-    setdataSource(data);
-    setData(data);
-  }
-
 
   const columns = [
     {
@@ -63,6 +51,23 @@ function User({
     },
   ];
 
+  
+  useEffect(() => {
+    refreshData();
+  }, [])
+
+  function refreshData(){
+    fetch('http://localhost:3001/api/getData')
+    .then((data) => data.json())
+    .then((res) => 
+      setDataNeed(res.data)
+    )
+  }
+  function setDataNeed(data){
+    setdataSource(data);
+    setData(data);
+  }
+
   function searchData(e) {
     console.log(e.target.value);
     console.log(data);
@@ -79,13 +84,13 @@ function User({
   function handleOk() {
     validateFieldsAndScroll((errors, values) => {
       if(!errors){
-        console.log(values);
+        axios.post('http://localhost:3001/api/putData', values);
+        setModalUserVisible(false);
+        refreshData();
       }else{
         console.log(errors);
       }
     });
-
-    // setModalUserVisible(false);
   }
 
   function handleCancel() {
@@ -114,7 +119,12 @@ function User({
       okType: 'danger',
       cancelText: 'No',
       onOk() {
-        console.log('OK');
+        axios.delete('http://localhost:3001/api/deleteData', {
+          data: {
+            id: record["_id"]
+          },
+        });
+        refreshData();
       },
       onCancel() {
         console.log('Cancel');
@@ -122,12 +132,15 @@ function User({
     });
   }
 
-  
-
-  function handleSubmit() {
-
+  function updateData(){
+    // Next Lanjutin dari sini brow
+    axios.post('http://localhost:3001/api/updateData', {
+      id: objIdToUpdate,
+      update: { message: updateToApply },
+    });
   }
 
+  
   const { getFieldDecorator, validateFieldsAndScroll } = form;
 
   return (
@@ -140,7 +153,7 @@ function User({
         onCancel={handleCancel}
         destroyOnClose={true}
       >
-        <Form onSubmit={handleSubmit} className="login-form">
+        <Form className="login-form">
           <Form.Item>
             {getFieldDecorator('username', {
               rules: [{ required: true, message: 'Please input your username!' }],

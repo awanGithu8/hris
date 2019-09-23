@@ -4,8 +4,9 @@ const Schema = mongoose.Schema;
 // this will be our data base's data structure 
 const DataSchema = new Schema(
   {
-    username: String,
-    role: String
+    username: {type: String, unique: true, required: true},
+    role: {type: String, required: true},
+    password: {type: String}
   },
   { timestamps: true }
 );
