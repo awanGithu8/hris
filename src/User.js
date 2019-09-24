@@ -26,9 +26,32 @@ function User({
       sorter: (a, b) => a.username.length - b.username.length,
     },
     {
+      title: 'Name',
+      dataIndex: 'name',
+      key: 'name',
+      sorter: (a, b) => a.name.length - b.name.length,
+    },
+    {
+      title: 'Division',
+      dataIndex: 'division',
+      key: 'division',
+    },
+    {
+      title: 'Job Title',
+      dataIndex: 'job_title',
+      key: 'job_title',
+    },
+    {
+      title: 'Remaining Permit',
+      dataIndex: 'remaining',
+      key: 'remaining',
+    },
+
+    {
       title: 'Role',
       dataIndex: 'role',
       key: 'role',
+      sorter: (a, b) => a.role.length - b.role.length,
     },
     {
       title: 'Action',
@@ -117,7 +140,7 @@ function User({
 
   function onClickAdd() {
     setModalTitle("Add User");
-
+    setModalData("");
     setModalUserVisible(true);
   }
 
@@ -176,7 +199,7 @@ function User({
           </Form.Item>
           <Form.Item>
             {getFieldDecorator('role', {
-               initialValue: modalData?modalData.role:"",
+               initialValue: modalData?modalData.role:"Administrator",
               rules: [{ required: true, message: 'Please Select Role' }],
             })(
               <Select placeholder="Role">

@@ -26,7 +26,7 @@ function Layout(props) {
             />
           </NavLink>
           <Menu
-            style={{height: "75vh"}}
+            style={{height: "75vh", width: "16.5vw"}}
             defaultSelectedKeys={['1']}
             defaultOpenKeys={['sub1', 'sub2', 'sub3']}
             mode="inline"
@@ -47,36 +47,38 @@ function Layout(props) {
                 </span>
               }
             >
-              <Menu.Item key="user"><NavLink to="/user">User</NavLink></Menu.Item>
-              <Menu.Item key="employee"><NavLink to="/employee">Employee</NavLink></Menu.Item>
-              <Menu.Item key="division"><NavLink to="/division">Division</NavLink></Menu.Item>
+              <Menu.Item key="user"><NavLink to="/user"><Icon type="usergroup-add" /> User</NavLink></Menu.Item>
+              <Menu.Item key="division"><NavLink to="/division"><Icon type="apartment" /> Division</NavLink></Menu.Item>
+              <Menu.Item key="job_title"><NavLink to="/job_title"><Icon type="file-done" /> Job Title</NavLink></Menu.Item>
+              {/* <Menu.Item key="employee"><NavLink to="/employee">Employee</NavLink></Menu.Item> */}
             </SubMenu>
 
             <SubMenu
               key="sub2"
               title={
                 <span>
-                  <Icon type="file-done" />
+                  <Icon type="table" />
                   <span>Modules</span>
                 </span>
               }
             >
-              <Menu.Item key="daftar_cuti"><NavLink to="/cuti">Permit List</NavLink></Menu.Item>
-              <Menu.Item key="pengajuan_cuti"><NavLink to="/add_cuti">Permit Request</NavLink></Menu.Item>
-              <Menu.Item key="approval"><NavLink to="/approval">Permit Approval</NavLink></Menu.Item>
+              <Menu.Item key="daftar_cuti"><NavLink to="/cuti"><Icon type="menu" /> Permit List</NavLink></Menu.Item>
+              <Menu.Item key="pengajuan_cuti"><NavLink to="/add_cuti"><Icon type="form" /> Permit Request</NavLink></Menu.Item>
+              <Menu.Item key="approval"><NavLink to="/approval"><Icon type="check" /> Permit Approval</NavLink></Menu.Item>
             </SubMenu>
 
-            {/* <SubMenu
+            <SubMenu
               key="sub3"
               title={
                 <span>
-                  <Icon type="setting" />
-                  <span>Configurations</span>
+                  <Icon type="area-chart" />
+                  <span>Reports</span>
                 </span>
               }
-            > */}
+            >
+              <Menu.Item key="report_permit"><NavLink to="/"><Icon type="pie-chart" /> Permit Report</NavLink></Menu.Item>
+            </SubMenu>
               <Menu.Item key="logout"><NavLink to="/"><Icon type="logout" /> Logout</NavLink></Menu.Item>
-            {/* </SubMenu> */}
           </Menu>          
         </Col>
         <Col span={20}>
