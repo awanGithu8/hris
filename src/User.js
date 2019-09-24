@@ -58,15 +58,23 @@ function User({
   }, [])
 
   function refreshData(){
-    fetch('http://localhost:3001/api/getData')
-    .then((data) => data.json())
-    .then((res) => 
-      setDataNeed(res.data)
-    )
+    setFirstLoad(true);
+    setTimeout(
+        function() {
+          axios.get('http://localhost:3001/api/getData')
+            .then((res) => {
+              setDataNeed(res.data.data)
+            }
+          )
+        }
+        .bind(this),
+        1000
+    );
   }
-  function setDataNeed(data){
-    setdataSource(data);
-    setData(data);
+  
+  function setDataNeed(skiw){
+    setdataSource(skiw);
+    setData(skiw);
     setFirstLoad(false);
   }
 
@@ -94,6 +102,7 @@ function User({
             update: values,
           });
         }
+        setModalData("");
         setModalUserVisible(false);
         refreshData();
       }else{
@@ -103,7 +112,6 @@ function User({
   }
 
   function handleCancel() {
-    setModalData("");
     setModalUserVisible(false);
   }
 
