@@ -3,7 +3,11 @@ const express = require('express');
 var cors = require('cors');
 const bodyParser = require('body-parser');
 const logger = require('morgan');
-const Data = require('./data');
+
+/* Import Schema */
+  const User = require('./user');
+  const Division = require('./division');
+/* End Import Schema */
 
 const API_PORT = 3001;
 const app = express();
@@ -33,7 +37,7 @@ app.use(logger('dev'));
 // this is our get method
 // this method fetches all available data in our database
 router.get('/getData', (req, res) => {
-  Data.find((err, data) => {
+  User.find((err, data) => {
     if (err) return res.json({ success: false, error: err });
     return res.json({ success: true, data: data });
   });
@@ -43,7 +47,7 @@ router.get('/getData', (req, res) => {
 // this method overwrites existing data in our database
 router.post('/updateData', (req, res) => {
   const { id, update } = req.body;
-  Data.findByIdAndUpdate(id, update, (err) => {
+  User.findByIdAndUpdate(id, update, (err) => {
     if (err) return res.json({ success: false, error: err });
     return res.json({ success: true });
   });
@@ -53,7 +57,7 @@ router.post('/updateData', (req, res) => {
 // this method removes existing data in our database
 router.delete('/deleteData', (req, res) => {
   const { id } = req.body;
-  Data.findByIdAndRemove(id, (err) => {
+  User.findByIdAndRemove(id, (err) => {
     if (err) return res.send(err);
     return res.json({ success: true });
   });
@@ -62,7 +66,7 @@ router.delete('/deleteData', (req, res) => {
 // this is our create methid
 // this method adds new data in our database
 router.post('/putData', (req, res) => {
-  let data = new Data();
+  let data = new User();
 
   const { username, role } = req.body;
 
@@ -79,6 +83,14 @@ router.post('/putData', (req, res) => {
     return res.json({ success: true });
   });
 });
+
+/* API Division */
+
+/* END API Division */
+
+/* API Job Title */
+
+/* END API Job title */
 
 // append /api for our http requests
 app.use('/api', router);
