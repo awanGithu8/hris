@@ -1,27 +1,26 @@
 import React, { useState, useEffect } from 'react';
 
-import { Table, Input, Button, Row, Col, Divider } from 'antd';
+import { Table, Input, Form, Tooltip, Button, Icon, Divider, Modal, notification } from 'antd';
+
+import axios from 'axios';
+const { confirm } = Modal;
 
 function Approval() {
-  const [dataSource, setdataSource] = useState([]);
+  let msg = [];
+  msg['approve'] = ['Permit Successfully approved','Permit has been approved'];
+  msg['reject'] = ['Permit Successfully rejected','Permit has been rejected'];
 
-  const data = [];
-  for (let i = 0; i < 25; i++) {
-    data.push({
-      key: i,
-      name: 'John ' + i,
-      type: 'Tahunan/Khusus/Sakit',
-      from_date: '2019-09-20',
-      to_date: '2019-09-20',
-      total_days: i+1,
-      work_date: '2019-09-21',
-      reason: "Interview Kerja"
+  const openNotificationWithIcon = (type, status) => {
+    notification[type]({
+      message: msg[status][0],
+      description:
+        msg[status][1]
     });
-  }
+  };
 
-  useEffect(() => {
-    setdataSource(data);
-  }, [])
+  const [dataSource, setdataSource] = useState([]);
+  const [firstLoad, setFirstLoad] = useState(true)
+  const [data, setData] = useState([]);
 
   const columns = [
     {
@@ -46,9 +45,10 @@ function Approval() {
       key: 'to_date',
     },
     {
-      title: 'Total Days',
+      title: 'Total',
       dataIndex: 'total_days',
       key: 'total_days',
+      align: 'right',
       sorter: (a, b) => a.total_days - b.total_days,
     },
     {
@@ -62,54 +62,130 @@ function Approval() {
       key: 'reason',
     },
     {
+      title: 'Status',
+      dataIndex: 'status',
+      key: 'status',
+    },
+    {
       title: 'Action',
       dataIndex: 'action',
       key: 'action',
       render: (text, record) => (
         <span>
-          <a>Edit</a>
-          <Divider type="vertical" />
-          <a>Approve</a>
-          <Divider type="vertical" />
-          <a>Reject</a>
+          <Tooltip title="Approve">
+            <Button type="primary" onClick={() => onClickApprove(record)}>
+              <Icon type="carry-out" />
+            </Button>
+          </Tooltip>
+          {" "}
+          {/* <Divider type="horizontal" /> */}
+          <Tooltip title="Reject">
+            <Button type="danger" onClick={() => onClickReject(record)}>
+              <Icon type="close-square" />
+            </Button>
+          </Tooltip>
         </span>
       )
     },
   ];
 
-  function searchData(e){
-    let dataFilter = data.filter(function(d){
+  function onClickApprove(data){
+    const {name, type, from_date, to_date} = data;
+    confirm({
+      title: `Are you sure approve this ${type}?`,
+      content: `Name: ${name} [${from_date} s/d ${to_date}]`,
+      okText: 'Yes',
+      cancelText: 'No',
+      onOk() {
+        axios.post('http://localhost:3001/api/approveCuti', {
+          id: data["_id"]
+        });
+        openNotificationWithIcon('success', 'approve');
+        refreshData();
+      },
+      onCancel() {
+        console.log('Cancel');
+      },
+    });
+  }
+
+  function onClickReject(data){
+    const {name, type, from_date, to_date} = data;
+
+    confirm({
+      title: `Are you sure reject this ${type}?`,
+      content: `Name: ${name} [${from_date} s/d ${to_date}]`,
+      okText: 'Yes',
+      okType: 'danger',
+      cancelText: 'No',
+      onOk() {
+        axios.post('http://localhost:3001/api/rejectCuti', {
+          id: data["_id"]
+        });
+        openNotificationWithIcon('success', 'reject');
+        refreshData();
+      },
+      onCancel() {
+        console.log('Cancel');
+      },
+    });
+  }
+
+  
+  useEffect(() => {
+    refreshData();
+  }, [])
+
+  function refreshData(){
+    setFirstLoad(true);
+    setTimeout(
+        function() {
+          axios.get('http://localhost:3001/api/listApproval')
+            .then((res) => {
+              setDataNeed(res.data.data)
+            }
+          )
+        }
+        .bind(this),
+        1000
+    );
+  }
+  
+  function setDataNeed(skiw){
+    setdataSource(skiw);
+    setData(skiw);
+    setFirstLoad(false);
+  }
+
+  function searchData(e) {
+    console.log(e.target.value);
+    console.log(data);
+    let dataFilter = data.filter(function (d) {
       return (
-        d.name.includes(e.target.value)
-        ||
-        d.total_days.toString().includes(e.target.value)
+        d.description.toLowerCase().includes(e.target.value.toLowerCase())
       )
     })
     setdataSource(dataFilter);
   }
 
-  return (
-    <React.Fragment>
-      <center><h3>Permit Approval</h3></center>
-      <Row>
-        <Col span={22}>
-          <Input 
-              placeholder="Find Permit" 
-              onPressEnter={searchData}
-            />
-        </Col>
-        <Col span={2}>
-          <Button type="primary" icon="search">Search</Button>
-        </Col>
-      </Row>
-      <Table
-        dataSource={dataSource}
-        columns={columns}
-        pagination={{ defaultPageSize: 8, showSizeChanger: false }}
-
-      />
-    </React.Fragment>
-  );
+   return(
+      <React.Fragment>        
+        <center><h3>Approval List</h3></center>
+        <Input
+          placeholder="Find Permit"
+          onPressEnter={searchData}
+        />    
+        <Table
+          dataSource={dataSource}
+          columns={columns}
+          pagination={{ defaultPageSize: 5, showSizeChanger: false }}
+          rowKey="_id" 
+          loading={firstLoad}
+        />
+      </React.Fragment>
+    );
 }
 
-export default Approval;
+const ApprovalForm = Form.create({ name: 'Approval' })(Approval);
+
+export default ApprovalForm;

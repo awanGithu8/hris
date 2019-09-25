@@ -32,9 +32,10 @@ function Cuti() {
       key: 'to_date',
     },
     {
-      title: 'Total Days',
+      title: 'Total',
       dataIndex: 'total_days',
       key: 'total_days',
+      align: 'right',
       sorter: (a, b) => a.total_days - b.total_days,
     },
     {
@@ -46,6 +47,11 @@ function Cuti() {
       title: 'Reason',
       dataIndex: 'reason',
       key: 'reason',
+    },
+    {
+      title: 'Status',
+      dataIndex: 'status',
+      key: 'status',
     },
   ];
 
@@ -96,7 +102,7 @@ function Cuti() {
         <Table
           dataSource={dataSource}
           columns={columns}
-          pagination={{ defaultPageSize: 6, showSizeChanger: false }}
+          pagination={{ defaultPageSize: 8, showSizeChanger: false }}
           rowKey="_id" 
           loading={firstLoad}
         />

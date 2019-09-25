@@ -23,6 +23,14 @@ function RegistrationForm({ form, props }) {
 
   const [dataUser, setdataUser] = useState([]);
 
+  const [permitTotal, setPermitTotal] = useState(1);
+  let working_date = addWorkDays(moment().toDate(), permitTotal); // Tue Nov 29 2016 00:00:00 GMT+0000 (GMT Standard Time)
+  let currentMonth = ("0" + working_date.getMonth()).slice(-2);
+  let currentDate = ("0" + working_date.getDate()).slice(-2);
+  let working_date_format = currentDate + "-" + currentMonth + "-" + working_date.getFullYear();
+
+  const [workingDate, setWorkingDate] = useState(working_date_format);
+
   const openNotificationWithIcon = type => {
     notification[type]({
       message: 'Add Permit Successfully added',
@@ -48,26 +56,61 @@ function RegistrationForm({ form, props }) {
     console.log(`selected ${value}`);
   }
 
-  function workday_count(start,end) {
-    var first = start.clone().endOf('week'); // end of first week
-    var last = end.clone().startOf('week'); // start of last week
-    var days = last.diff(first,'days') * 5 / 7; // this will always multiply of 7
-    var wfirst = first.day() - start.day(); // check first week
-    if(start.day() == 0) --wfirst; // -1 if start with sunday 
-    var wlast = end.day() - last.day(); // check last week
-    if(end.day() == 6) --wlast; // -1 if end with saturday
-    return wfirst + days + wlast; // get the total
+  function workday_count(startDate, endDate) { 
+    var day = moment(startDate);
+    var businessDays = 0;
+
+    while (day.isSameOrBefore(endDate,'day')) {
+      if (day.day()!=0 && day.day()!=6) businessDays++;
+      day.add(1,'d');
+    }
+    return businessDays;
   }
+  
+  function addWorkDays(startDate, days) {
+    if(isNaN(days)) {
+        console.log("Value provided for \"days\" was not a number");
+        return
+    }
+    if(!(startDate instanceof Date)) {
+        console.log("Value provided for \"startDate\" was not a Date object");
+        return
+    }
+    // Get the day of the week as a number (0 = Sunday, 1 = Monday, .... 6 = Saturday)
+    var dow = startDate.getDay();
+    var daysToAdd = parseInt(days);
+    // If the current day is Sunday add one day
+    if (dow == 0)
+        daysToAdd++;
+    // If the start date plus the additional days falls on or after the closest Saturday calculate weekends
+    if (dow + daysToAdd >= 6) {
+        //Subtract days in current working week from work days
+        var remainingWorkDays = daysToAdd - (5 - dow);
+        //Add current working week's weekend
+        daysToAdd += 2;
+        if (remainingWorkDays > 5) {
+            //Add two days for each working week by calculating how many weeks are included
+            daysToAdd += 2 * Math.floor(remainingWorkDays / 5);
+            //Exclude final weekend if remainingWorkDays resolves to an exact number of weeks
+            if (remainingWorkDays % 5 == 0)
+                daysToAdd -= 2;
+        }
+    }
+    startDate.setDate(startDate.getDate() + daysToAdd);
+    return startDate;
+}
+
 
   function onChangeDate(dates, dateStrings) {
-
-    let permitTotal = workday_count(dates[0],dates[1]);
-    console.log(permitTotal);
-
-
+    let permit_total = workday_count(dates[0],dates[1]);
+    let working_date = addWorkDays(dates[0].toDate(), permit_total); // Tue Nov 29 2016 00:00:00 GMT+0000 (GMT Standard Time)
     
-    console.log("From: ", dates[0], ", to: ", dates[1]);
-    console.log("From: ", dateStrings[0], ", to: ", dateStrings[1]);
+    let date = ("0" + working_date.getDate()).slice(-2);
+    let month = ("0" + working_date.getMonth()).slice(-2);
+
+    let working_date_format = date + "-" + month + "-" + working_date.getFullYear();
+    setWorkingDate(working_date_format);
+    setPermitTotal(permit_total)
   }
 
   function handleSubmit(e) {
@@ -79,8 +122,8 @@ function RegistrationForm({ form, props }) {
         
         delete values["date"];
 
-        values.total_days = 7;
-        values.work_date = "18/07/2019";
+        values.total_days = permitTotal;
+        values.work_date = workingDate;
 
 
         console.log("Received values of form: ", values);
@@ -200,7 +243,7 @@ function RegistrationForm({ form, props }) {
         <span style={{
           marginLeft: "15vw",
         }}>
-          <b><i>Total: ... Days</i></b>
+          <b><i>Total: {permitTotal} Days</i></b>
         </span>
         <br/><br/>
         <Form.Item

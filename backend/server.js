@@ -190,10 +190,21 @@ router.delete('/deleteJobTitle', (req, res) => {
 
 /* API Cuti */
 router.get('/listCuti', (req, res) => {
-  Cuti.find((err, data) => {
+  Cuti.find(function(err, data){
     if (err) return res.json({ success: false, error: err });
     return res.json({ success: true, data: data });
+  }).sort({
+    createdAt: -1
   });
+});
+
+router.get('/listApproval', (req, res) => {
+  Cuti.find({ status: "Waiting For Approval" }, function(err, data){
+    if (err) return res.json({ success: false, error: err });
+    return res.json({ success: true, data: data });
+  }).sort({
+    createdAt: -1
+  });;
 });
 
 router.post('/addCuti', (req, res) => {
@@ -210,6 +221,23 @@ router.post('/addCuti', (req, res) => {
     return res.json({ success: true });
   });
 });
+
+router.post('/approveCuti', (req, res) => {
+  const { id } = req.body;
+  Cuti.findByIdAndUpdate(id, {status: "Approved"}, (err) => {
+    if (err) return res.json({ success: false, error: err });
+    return res.json({ success: true });
+  });
+});
+
+router.post('/rejectCuti', (req, res) => {
+  const { id } = req.body;
+  Cuti.findByIdAndUpdate(id, {status: "Rejected"}, (err) => {
+    if (err) return res.json({ success: false, error: err });
+    return res.json({ success: true });
+  });
+});
+
 
 /* End API Cuti */
 
