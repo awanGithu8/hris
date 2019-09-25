@@ -15,6 +15,8 @@ function User({
   const [modalTitle, setModalTitle] = useState("");
   const [modalData, setModalData] = useState("");
   const [data, setData] = useState([]);
+  const [dataJobTitle,setdataJobTitle] = useState([]);
+  const [dataJobTitleDivision,setDataJobTitleDivision] = useState([]);
 
   const [firstLoad, setFirstLoad] = useState(true)
 
@@ -78,6 +80,7 @@ function User({
   
   useEffect(() => {
     refreshData();
+    getJobTitle();
   }, [])
 
   function refreshData(){
@@ -120,6 +123,8 @@ function User({
     validateFieldsAndScroll((errors, values) => {
       if(!errors){
         if(modalData == ""){ // Add New Data
+          values.division = dataJobTitleDivision[values.job_title];
+          console.log(values);
           axios.post('http://localhost:3001/api/putData', values);
         }else{
           axios.post('http://localhost:3001/api/updateData', {
@@ -174,6 +179,20 @@ function User({
       },
     });
   }
+
+  function getJobTitle() {
+    axios.get("http://localhost:3001/api/listJobTitle").then(res => {
+      let job_title = [];
+      let job_title_division = [];
+      for (const [index, value] of res.data.data.entries()) {
+        job_title.push(<Option key={index} value={value.description}>{value.description}</Option>)
+        job_title_division[value.description] = value.division;
+      }
+  
+      setdataJobTitle(job_title);
+      setDataJobTitleDivision(job_title_division);
+    });
+  }
   
   const { getFieldDecorator, validateFieldsAndScroll } = form;
 
@@ -200,6 +219,38 @@ function User({
             )}
           </Form.Item>
           <Form.Item>
+            {getFieldDecorator('password', {
+              rules: [{ required: true, message: 'Please input your Password!' }],
+            })(
+              <Input
+                prefix={<Icon type="lock" style={{ color: 'rgba(0,0,0,.25)' }} />}
+                type="password"
+                placeholder="Password"
+              />,
+            )}
+          </Form.Item>          
+          <Form.Item>
+            {getFieldDecorator('name', {
+              initialValue: modalData?modalData.name:"",
+              rules: [{ required: true, message: 'Please input your name!' }],
+            })(
+              <Input
+                prefix={<Icon type="user" style={{ color: 'rgba(0,0,0,.25)' }} />}
+                placeholder="Name"
+              />,
+            )}
+          </Form.Item>
+          <Form.Item>
+            {getFieldDecorator('job_title', {
+               initialValue: modalData?modalData.job_title:"",
+              rules: [{ required: true, message: 'Please Select Job Title' }],
+            })(
+              <Select placeholder="Job Title">
+                {dataJobTitle}
+              </Select>
+            )}
+          </Form.Item>
+          <Form.Item>
             {getFieldDecorator('role', {
                initialValue: modalData?modalData.role:"Administrator",
               rules: [{ required: true, message: 'Please Select Role' }],
@@ -212,16 +263,16 @@ function User({
             )}
           </Form.Item>
           <Form.Item>
-            {getFieldDecorator('password', {
-              rules: [{ required: true, message: 'Please input your Password!' }],
+            {getFieldDecorator('remaining', {
+              initialValue: modalData?modalData.remaining:"",
+              rules: [{ required: true, message: 'Please input Permit Remaining!' }],
             })(
               <Input
-                prefix={<Icon type="lock" style={{ color: 'rgba(0,0,0,.25)' }} />}
-                type="password"
-                placeholder="Password"
+                prefix={<Icon type="user" style={{ color: 'rgba(0,0,0,.25)' }} />}
+                placeholder="Permit Remaining"
               />,
             )}
-          </Form.Item>
+          </Form.Item>          
         </Form>
       </Modal>
       <center><h3>User List</h3></center>
