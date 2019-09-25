@@ -78,7 +78,7 @@ function Division({
     console.log(data);
     let dataFilter = data.filter(function (d) {
       return (
-        d.division.toLowerCase().includes(e.target.value.toLowerCase())
+        d.description.toLowerCase().includes(e.target.value.toLowerCase())
       )
     })
     setdataSource(dataFilter);

@@ -38,6 +38,12 @@ function JobTitle({ form }) {
       sorter: (a, b) => a.description.length - b.description.length
     },
     {
+      title: "Division",
+      dataIndex: "division",
+      key: "division",
+      sorter: (a, b) => a.division.length - b.division.length
+    },
+    {
       title: "Action",
       dataIndex: "action",
       key: "action",
@@ -98,7 +104,11 @@ function JobTitle({ form }) {
     console.log(e.target.value);
     console.log(data);
     let dataFilter = data.filter(function(d) {
-      return d.JobTitle.toLowerCase().includes(e.target.value.toLowerCase());
+      return (
+        d.description.toLowerCase().includes(e.target.value.toLowerCase())
+        ||
+        d.division.toLowerCase().includes(e.target.value.toLowerCase())
+      )
     });
     setdataSource(dataFilter);
   }
