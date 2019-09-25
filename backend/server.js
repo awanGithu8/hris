@@ -7,6 +7,7 @@ const logger = require('morgan');
 /* Import Schema */
   const User = require('./user');
   const Division = require('./division');
+  const JobTitle = require('./job_title');
 /* End Import Schema */
 
 const API_PORT = 3001;
@@ -91,10 +92,100 @@ router.post('/putData', (req, res) => {
 });
 
 /* API Division */
+router.get('/listDivision', (req, res) => {
+  Division.find((err, data) => {
+    if (err) return res.json({ success: false, error: err });
+    return res.json({ success: true, data: data });
+  });
+});
+
+router.post('/addDivision', (req, res) => {
+  let data = new Division();
+
+  for (var key in req.body) {
+      if (req.body.hasOwnProperty(key)) {
+          data[key] = req.body[key];
+      }
+  }
+
+  if (req.body.description == "") {
+    return res.json({
+      success: false,
+      error: 'Description is required',
+    });
+  }
+
+  data.save((err) => {
+    if (err) return res.json({ success: false, error: err });
+    return res.json({ success: true });
+  });
+});
+
+router.post('/updateDivision', (req, res) => {
+  const { id, update } = req.body;
+  Division.findByIdAndUpdate(id, update, (err) => {
+    if (err) return res.json({ success: false, error: err });
+    return res.json({ success: true });
+  });
+});
+
+router.delete('/deleteDivision', (req, res) => {
+  const { id } = req.body;
+  Division.findByIdAndRemove(id, (err) => {
+    if (err) return res.send(err);
+    return res.json({ success: true });
+  });
+});
 
 /* END API Division */
 
 /* API Job Title */
+
+router.get('/listJobTitle', (req, res) => {
+  JobTitle.find((err, data) => {
+    if (err) return res.json({ success: false, error: err });
+    return res.json({ success: true, data: data });
+  });
+});
+
+router.post('/addJobTitle', (req, res) => {
+  let data = new JobTitle();
+
+  for (var key in req.body) {
+      if (req.body.hasOwnProperty(key)) {
+          data[key] = req.body[key];
+      }
+  }
+
+  if (req.body.description == "" || req.body.division == "") {
+    return res.json({
+      success: false,
+      error: 'Description and Division is required',
+    });
+  }
+
+  data.save((err) => {
+    if (err) return res.json({ success: false, error: err });
+    return res.json({ success: true });
+  });
+});
+
+router.post('/updateJobTitle', (req, res) => {
+  const { id, update } = req.body;
+  JobTitle.findByIdAndUpdate(id, update, (err) => {
+    if (err) return res.json({ success: false, error: err });
+    return res.json({ success: true });
+  });
+});
+
+router.delete('/deleteJobTitle', (req, res) => {
+  const { id } = req.body;
+  JobTitle.findByIdAndRemove(id, (err) => {
+    if (err) return res.send(err);
+    return res.json({ success: true });
+  });
+});
+
 
 /* END API Job title */
 

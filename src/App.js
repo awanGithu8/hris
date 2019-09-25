@@ -6,6 +6,7 @@ import Login from './Login';
 import User from './User';
 import Employee from './Employee';
 import Division from './Division';
+import JobTitle from './JobTitle';
 import Cuti from './Cuti';
 import Approval from './Approval';
 import RequestCuti from './RequestCuti';
@@ -26,6 +27,7 @@ function App() {
             <Route path="/division" component={Division}/>
             <Route path="/approval" component={Approval}/>
             <Route path="/add_cuti" component={RequestCuti}/>
+            <Route path="/job_title" component={JobTitle}/>
           </header>
         </Layout>
       </HashRouter>

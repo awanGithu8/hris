@@ -11,7 +11,7 @@ function Division({
   form
 }) {
   const [dataSource, setdataSource] = useState([]);
-  const [ModalUserVisible, setModalUserVisible] = useState(false);
+  const [ModalDivisionVisible, setModalDivisionVisible] = useState(false);
   const [modalTitle, setModalTitle] = useState("");
   const [modalData, setModalData] = useState("");
   const [data, setData] = useState([]);
@@ -56,7 +56,7 @@ function Division({
     setFirstLoad(true);
     setTimeout(
         function() {
-          axios.get('http://localhost:3001/api/getDivision')
+          axios.get('http://localhost:3001/api/listDivision')
             .then((res) => {
               setDataNeed(res.data.data)
             }
@@ -88,15 +88,19 @@ function Division({
     validateFieldsAndScroll((errors, values) => {
       if(!errors){
         if(modalData == ""){ // Add New Data
-          axios.post('http://localhost:3001/api/putData', values);
+          axios.post('http://localhost:3001/api/addDivision', values);
         }else{
-          axios.post('http://localhost:3001/api/updateData', {
+          console.log({
+            id: modalData["_id"],
+            update: values,
+          });
+          axios.post('http://localhost:3001/api/updateDivision', {
             id: modalData["_id"],
             update: values,
           });
         }
         setModalData("");
-        setModalUserVisible(false);
+        setModalDivisionVisible(false);
         refreshData();
       }else{
         console.log(errors);
@@ -105,13 +109,13 @@ function Division({
   }
 
   function handleCancel() {
-    setModalUserVisible(false);
+    setModalDivisionVisible(false);
   }
 
   function onClickAdd() {
     setModalTitle("Add Division");
     setModalData("");
-    setModalUserVisible(true);
+    setModalDivisionVisible(true);
   }
 
   function onClickEdit(record) {
@@ -119,18 +123,18 @@ function Division({
 
     setModalData(record);
 
-    setModalUserVisible(true);
+    setModalDivisionVisible(true);
   }
 
   function onClickDelete(record){
     confirm({
-      title: 'Are you sure delete this user?',
-      content: 'When user deleted you can\'t get it back',
+      title: `Are you sure delete this division ${record.description} ?`,
+      content: 'When division deleted you can\'t get it back',
       okText: 'Yes',
       okType: 'danger',
       cancelText: 'No',
       onOk() {
-        axios.delete('http://localhost:3001/api/deleteData', {
+        axios.delete('http://localhost:3001/api/deleteDivision', {
           data: {
             id: record["_id"]
           },
@@ -150,43 +154,19 @@ function Division({
     <React.Fragment>
       <Modal
         title={modalTitle}
-        visible={ModalUserVisible}
+        visible={ModalDivisionVisible}
         onOk={handleOk}
         onCancel={handleCancel}
         destroyOnClose={true}
       >
         <Form className="login-form">
           <Form.Item>
-            {getFieldDecorator('username', {
-              initialValue: modalData?modalData.username:"",
-              rules: [{ required: true, message: 'Please input your username!' }],
+            {getFieldDecorator('description', {
+              initialValue: modalData?modalData.description:"",
+              rules: [{ required: true, message: 'Please input your description!' }],
             })(
               <Input
-                prefix={<Icon type="user" style={{ color: 'rgba(0,0,0,.25)' }} />}
-                placeholder="Username"
-              />,
-            )}
-          </Form.Item>
-          <Form.Item>
-            {getFieldDecorator('role', {
-               initialValue: modalData?modalData.role:"Administrator",
-              rules: [{ required: true, message: 'Please Select Role' }],
-            })(
-              <Select placeholder="Role">
-                <Option value="Administrator">Administrator</Option>
-                <Option value="Approver">Approver</Option>
-                <Option value="Division">Division</Option>
-              </Select>
-            )}
-          </Form.Item>
-          <Form.Item>
-            {getFieldDecorator('password', {
-              rules: [{ required: true, message: 'Please input your Password!' }],
-            })(
-              <Input
-                prefix={<Icon type="lock" style={{ color: 'rgba(0,0,0,.25)' }} />}
-                type="password"
-                placeholder="Password"
+                placeholder="Description"
               />,
             )}
           </Form.Item>
