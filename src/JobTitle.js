@@ -11,8 +11,7 @@ import {
   Tooltip,
   Modal,
   Form,
-  Select,
-  Spin
+  Select
 } from "antd";
 
 import axios from "axios";
@@ -179,7 +178,6 @@ function JobTitle({ form }) {
 
   const { getFieldDecorator, validateFieldsAndScroll } = form;
 
-  if (!firstLoad) {
     return (
       <React.Fragment>
         <Modal
@@ -232,19 +230,10 @@ function JobTitle({ form }) {
           columns={columns}
           pagination={{ defaultPageSize: 6, showSizeChanger: false }}
           rowKey="_id"
+          loading={firstLoad}
         />
       </React.Fragment>
     );
-  } else {
-    return (
-      <div style={{ marginTop: "35vh" }}>
-        <center>
-          <Spin size="large" />
-          <p>Load Job Title data</p>
-        </center>
-      </div>
-    );
-  }
 }
 
 const JobTitleForm = Form.create({ name: "JobTitle" })(JobTitle);

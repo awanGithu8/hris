@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
-import { Table, Input, Button, Row, Col, Divider, Icon, Tooltip, Modal, Form, Select, Spin } from 'antd';
+import { Table, Input, Button, Row, Col, Divider, Icon, Tooltip, Modal, Form, Select } from 'antd';
 
 import axios from 'axios';
 
@@ -149,8 +149,7 @@ function Division({
   
   const { getFieldDecorator, validateFieldsAndScroll } = form;
 
-  if(!firstLoad){
-    return(
+   return(
     <React.Fragment>
       <Modal
         title={modalTitle}
@@ -197,20 +196,10 @@ function Division({
         columns={columns}
         pagination={{ defaultPageSize: 6, showSizeChanger: false }}
         rowKey="_id" 
+        loading={firstLoad}
       />
     </React.Fragment>
     );
-  }else{
-    return (
-      <div style={{marginTop: "35vh"}}>
-        <center>
-          <Spin size="large" />
-          <p>Load division data</p>
-        </center>
-      </div>
-    );
-  }
-
 }
 
 const DivisionForm = Form.create({ name: 'division' })(Division);

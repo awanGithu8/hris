@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
-import { Table, Input, Button, Row, Col, Divider, Icon, Tooltip, Modal, Form, Select, Spin } from 'antd';
+import { Table, Input, Button, Row, Col, Divider, Icon, Tooltip, Modal, Form, Select } from 'antd';
 
 import axios from 'axios';
 
@@ -196,8 +196,7 @@ function User({
   
   const { getFieldDecorator, validateFieldsAndScroll } = form;
 
-  if(!firstLoad){
-    return(
+  return(
     <React.Fragment>
       <Modal
         title={modalTitle}
@@ -300,20 +299,10 @@ function User({
         columns={columns}
         pagination={{ defaultPageSize: 6, showSizeChanger: false }}
         rowKey="_id" 
+        loading={firstLoad}
       />
     </React.Fragment>
     );
-  }else{
-    return (
-      <div style={{marginTop: "35vh"}}>
-        <center>
-          <Spin size="large" />
-          <p>Load user data</p>
-        </center>
-      </div>
-    );
-  }
-
 }
 
 const UserForm = Form.create({ name: 'user' })(User);
