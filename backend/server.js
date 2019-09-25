@@ -8,6 +8,7 @@ const logger = require('morgan');
   const User = require('./user');
   const Division = require('./division');
   const JobTitle = require('./job_title');
+  const Cuti = require('./cuti');
 /* End Import Schema */
 
 const API_PORT = 3001;
@@ -185,9 +186,32 @@ router.delete('/deleteJobTitle', (req, res) => {
     return res.json({ success: true });
   });
 });
-
-
 /* END API Job title */
+
+/* API Cuti */
+router.get('/listCuti', (req, res) => {
+  Cuti.find((err, data) => {
+    if (err) return res.json({ success: false, error: err });
+    return res.json({ success: true, data: data });
+  });
+});
+
+router.post('/addCuti', (req, res) => {
+  let data = new Cuti();
+
+  for (var key in req.body) {
+      if (req.body.hasOwnProperty(key)) {
+          data[key] = req.body[key];
+      }
+  }
+
+  data.save((err) => {
+    if (err) return res.json({ success: false, error: err });
+    return res.json({ success: true });
+  });
+});
+
+/* End API Cuti */
 
 // append /api for our http requests
 app.use('/api', router);

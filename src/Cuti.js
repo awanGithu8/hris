@@ -1,27 +1,13 @@
 import React, { useState, useEffect } from 'react';
 
-import { Table, Input, Button, Row, Col } from 'antd';
+import { Table, Input, Form } from 'antd';
+
+import axios from 'axios';
 
 function Cuti() {
   const [dataSource, setdataSource] = useState([]);
-
-  const data = [];
-  for (let i = 0; i < 25; i++) {
-    data.push({
-      key: i,
-      name: 'John ' + i,
-      type: 'Tahunan/Khusus/Sakit',
-      from_date: '2019-09-20',
-      to_date: '2019-09-20',
-      total_days: i+1,
-      work_date: '2019-09-21',
-      reason: "Interview Kerja"
-    });
-  }
-
-  useEffect(() => {
-    setdataSource(data);
-  }, [])
+  const [firstLoad, setFirstLoad] = useState(true)
+  const [data, setData] = useState([]);
 
   const columns = [
     {
@@ -63,39 +49,61 @@ function Cuti() {
     },
   ];
 
-  function searchData(e){
-    let dataFilter = data.filter(function(d){
+  
+  useEffect(() => {
+    refreshData();
+  }, [])
+
+  function refreshData(){
+    setFirstLoad(true);
+    setTimeout(
+        function() {
+          axios.get('http://localhost:3001/api/listCuti')
+            .then((res) => {
+              setDataNeed(res.data.data)
+            }
+          )
+        }
+        .bind(this),
+        1000
+    );
+  }
+  
+  function setDataNeed(skiw){
+    setdataSource(skiw);
+    setData(skiw);
+    setFirstLoad(false);
+  }
+
+  function searchData(e) {
+    console.log(e.target.value);
+    console.log(data);
+    let dataFilter = data.filter(function (d) {
       return (
-        d.name.includes(e.target.value)
-        ||
-        d.total_days.toString().includes(e.target.value)
+        d.description.toLowerCase().includes(e.target.value.toLowerCase())
       )
     })
     setdataSource(dataFilter);
   }
 
-  return (
-    <React.Fragment>
-      <center><h3>Permit List</h3></center>
-      <Row>
-        <Col span={22}>
-          <Input 
-              placeholder="Cari Data Cuti" 
-              onPressEnter={searchData}
-            />
-        </Col>
-        <Col span={2}>
-          <Button type="primary" icon="search">Search</Button>
-        </Col>
-      </Row>
-      <Table
-        dataSource={dataSource}
-        columns={columns}
-        pagination={{ defaultPageSize: 8, showSizeChanger: false }}
-
-      />
-    </React.Fragment>
-  );
+   return(
+      <React.Fragment>        
+        <center><h3>Permit List</h3></center>
+        <Input
+          placeholder="Find Permit"
+          onPressEnter={searchData}
+        />    
+        <Table
+          dataSource={dataSource}
+          columns={columns}
+          pagination={{ defaultPageSize: 6, showSizeChanger: false }}
+          rowKey="_id" 
+          loading={firstLoad}
+        />
+      </React.Fragment>
+    );
 }
 
-export default Cuti;
+const CutiForm = Form.create({ name: 'Cuti' })(Cuti);
+
+export default CutiForm;
