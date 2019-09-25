@@ -70,14 +70,20 @@ router.post('/putData', (req, res) => {
 
   const { username, role } = req.body;
 
+  for (var key in req.body) {
+      if (req.body.hasOwnProperty(key)) {
+          data[key] = req.body[key];
+      }
+  }
+
   if (username == "" && role == "") {
     return res.json({
       success: false,
       error: 'INVALID INPUTS',
     });
   }
-  data.username = username;
-  data.role = role;
+  // data.username = username;
+  // data.role = role;
   data.save((err) => {
     if (err) return res.json({ success: false, error: err });
     return res.json({ success: true });

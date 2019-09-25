@@ -86,6 +86,7 @@ function User({
         function() {
           axios.get('http://localhost:3001/api/getData')
             .then((res) => {
+              console.log(res);
               setDataNeed(res.data.data)
             }
           )
@@ -96,6 +97,7 @@ function User({
   }
   
   function setDataNeed(skiw){
+    console.log(skiw);
     setdataSource(skiw);
     setData(skiw);
     setFirstLoad(false);
