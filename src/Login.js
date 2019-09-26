@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
 import { Form, Icon, Input, Button } from 'antd';
 
-function Login({ form }) {
-    const [isLogin, setisLogin] = useState(true);
+function Login({ form, isLogin }) {
     const { getFieldDecorator, validateFields } = form;
 
     function handleSubmit(e) {

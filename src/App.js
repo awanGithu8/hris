@@ -28,6 +28,7 @@ function App() {
             <Route path="/approval" component={Approval}/>
             <Route path="/add_cuti" component={RequestCuti}/>
             <Route path="/job_title" component={JobTitle}/>
+            <Route path="/login" component={Login}/>
           </header>
         </Layout>
       </HashRouter>

@@ -204,7 +204,7 @@ router.get('/listApproval', (req, res) => {
     return res.json({ success: true, data: data });
   }).sort({
     createdAt: -1
-  });;
+  });
 });
 
 router.post('/addCuti', (req, res) => {
@@ -238,8 +238,17 @@ router.post('/rejectCuti', (req, res) => {
   });
 });
 
-
 /* End API Cuti */
+
+/* Api Login */
+router.post('/checkUserLogin', (req, res) => {
+  const { username } = req.body;
+  Cuti.find({ username: username, isLogin: true }, function(err, data){
+    if (err) return res.json({ success: false, error: err });
+    return res.json({ success: true, data: data });
+  });
+});
+/* End Api Login */
 
 // append /api for our http requests
 app.use('/api', router);

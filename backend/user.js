@@ -10,7 +10,8 @@ const DataSchema = new Schema(
     job_title: {type: String, required: true},
     remaining: {type: Number, required: true},
     role: {type: String, required: true},
-    password: {type: String}
+    password: {type: String},
+    isLogin: {type: Boolean, default: false}
   },
   { timestamps: true }
 );
