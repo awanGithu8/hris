@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { Form, Icon, Input, Button } from 'antd';
 
+import axios from "axios";
+
 function Login({ form, isLogin }) {
     const { getFieldDecorator, validateFields } = form;
 
@@ -8,12 +10,19 @@ function Login({ form, isLogin }) {
         e.preventDefault();
         validateFields((err, values) => {
             if (!err) {
+                axios.post('http://localhost:3001/api/userLoggedIn', values);
+                setTimeout(
+                    function() {
+                      window.location.reload();
+                    }
+                    .bind(this),
+                    1000
+                );               
                 console.log('Received values of form: ', values);
             }
         });
     };
 
-    if(!isLogin){
         return (
             <Form onSubmit={handleSubmit} className="login-form">
                 <img 
@@ -25,7 +34,7 @@ function Login({ form, isLogin }) {
                 <br/><br/>
                 <div className={"login-div"}>
                     <center>
-                        <h1>Sindata Permit Apps</h1>                        
+                        <h1>Permit Apps</h1>                        
                     </center>
                     <Form.Item>
                         {getFieldDecorator('username', {
@@ -59,13 +68,6 @@ function Login({ form, isLogin }) {
                 </div>
             </Form>
         )
-    }
-    return(<div>
-        <center>Santuy Human Resources Information System</center> 
-        <br/><br/>
-        Welcome %username%,
-
-    </div>);
 }
 
 const LoginForm = Form.create({ name: 'normal_login' })(Login);

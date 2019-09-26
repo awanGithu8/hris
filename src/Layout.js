@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Menu, Icon, Row, Col } from 'antd';
+import { Menu, Icon, Row, Col, Button } from 'antd';
 import logo from './logo.svg';
 
 import { NavLink } from "react-router-dom";
@@ -21,11 +21,24 @@ function Layout(props) {
   function getAuth(){
     axios.post('http://localhost:3001/api/checkUserLogin', {username: "Onesinus"})
       .then((res) => {
-        setisLogin(res.data.data.isLogin);
+        if(res.data.data[0]){
+          setisLogin(res.data.data[0].isLogin);
+        }
       }
     );
   }
   
+  function onClickLogout(){
+    axios.post('http://localhost:3001/api/userLoggedOut', {username: "Onesinus"});  
+    setTimeout(
+        function() {
+          window.location.reload();
+        }
+        .bind(this),
+        1000
+    );        
+  }
+
   useEffect(() => {
     getAuth();
   }, [])
@@ -101,7 +114,7 @@ function Layout(props) {
               >
                 <Menu.Item key="report_permit"><NavLink to="/"><Icon type="pie-chart" /> Permit Report</NavLink></Menu.Item>
               </SubMenu>
-                <Menu.Item key="logout"><NavLink to="/"><Icon type="logout" /> Logout</NavLink></Menu.Item>
+                <Menu.Item key="logout"><a onClick={onClickLogout} ><Icon type="logout" /> Logout</a></Menu.Item>
             </Menu>          
           </Col>
           <Col span={20}>

@@ -243,10 +243,25 @@ router.post('/rejectCuti', (req, res) => {
 /* Api Login */
 router.post('/checkUserLogin', (req, res) => {
   const { username } = req.body;
-  Cuti.find({ username: username, isLogin: true }, function(err, data){
+  console.log(username);
+  User.find({ username: username }, function(err, data){
     if (err) return res.json({ success: false, error: err });
     return res.json({ success: true, data: data });
   });
+});
+
+router.post('/userLoggedIn', (req, res) => {
+  User.findOneAndUpdate(req.body, { isLogin: true }, {}, function (err, data) {
+    if (err) return res.json({ success: false, error: err });
+    return res.json({ success: true, data: data });
+  });  
+});
+
+router.post('/userLoggedOut', (req, res) => {
+  User.findOneAndUpdate(req.body, { isLogin: false }, {}, function (err, data) {
+    if (err) return res.json({ success: false, error: err });
+    return res.json({ success: true, data: data });
+  });  
 });
 /* End Api Login */
 

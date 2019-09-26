@@ -2,6 +2,7 @@ import React from 'react';
 import './App.css';
 import Layout from './Layout';
 
+import Home from './Home';
 import Login from './Login';
 import User from './User';
 import Employee from './Employee';
@@ -20,7 +21,7 @@ function App() {
       <HashRouter>
         <Layout>
           <header className="App-header">
-            <Route exact path="/" component={Login}/>
+            <Route exact path="/" component={Home}/>
             <Route path="/cuti" component={Cuti}/>
             <Route path="/user" component={User}/>
             <Route path="/employee" component={Employee}/>
