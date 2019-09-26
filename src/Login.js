@@ -15,9 +15,18 @@ function Login({ form, isLogin }) {
 
     if(!isLogin){
         return (
-            <Form onSubmit={handleSubmit} className="login-form" style={{width: "80vw", borderRadius: "5px"}}>
-                <div style={{"margin": "10px"}}>
-                    <h1>Login</h1>
+            <Form onSubmit={handleSubmit} className="login-form">
+                <img 
+                    src={"/sindata.png"} 
+                    style={{
+                        height: "25vh",
+                    }}
+                />
+                <br/><br/>
+                <div className={"login-div"}>
+                    <center>
+                        <h1>Sindata Permit Apps</h1>                        
+                    </center>
                     <Form.Item>
                         {getFieldDecorator('username', {
                             rules: [{ required: true, message: 'Please input your username!' }],
@@ -44,6 +53,9 @@ function Login({ form, isLogin }) {
                             Log in
                         </Button>
                     </Form.Item>
+                </div>
+                <div style={{textAlign: "right"}}>
+                    <p>Copyright &copy; 2019 - OSPT</p>
                 </div>
             </Form>
         )
