@@ -21,7 +21,7 @@ function Layout(props) {
   function getAuth(){
     axios.post('http://localhost:3001/api/checkUserLogin', {username: "Onesinus"})
       .then((res) => {
-        if(res.data.data[0]){
+        if(res.data.data){
           setisLogin(res.data.data[0].isLogin);
         }
       }
