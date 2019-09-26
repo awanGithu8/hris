@@ -4,6 +4,9 @@ import { Table, Input, Form } from 'antd';
 
 import axios from 'axios';
 
+import {BACKEND_URL} from "./config/connection";
+
+
 function Cuti() {
   const [dataSource, setdataSource] = useState([]);
   const [firstLoad, setFirstLoad] = useState(true)
@@ -64,7 +67,7 @@ function Cuti() {
     setFirstLoad(true);
     setTimeout(
         function() {
-          axios.get('http://localhost:3001/api/listCuti')
+          axios.get(BACKEND_URL+'listCuti')
             .then((res) => {
               setDataNeed(res.data.data)
             }

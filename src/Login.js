@@ -3,6 +3,8 @@ import { Form, Icon, Input, Button } from 'antd';
 
 import axios from "axios";
 
+import {BACKEND_URL} from "./config/connection";
+
 function Login({ form, isLogin }) {
     const { getFieldDecorator, validateFields } = form;
 
@@ -10,7 +12,7 @@ function Login({ form, isLogin }) {
         e.preventDefault();
         validateFields((err, values) => {
             if (!err) {
-                axios.post('http://localhost:3001/api/userLoggedIn', values);
+                axios.post(BACKEND_URL+'userLoggedIn', values);
                 setTimeout(
                     function() {
                       window.location.reload();

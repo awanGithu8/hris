@@ -8,6 +8,8 @@ import Login from './Login';
 
 import axios from 'axios';
 
+import {BACKEND_URL} from "./config/connection";
+
 const { SubMenu } = Menu;
 
 function Layout(props) {
@@ -19,7 +21,7 @@ function Layout(props) {
   };
 
   function getAuth(){
-    axios.post('http://localhost:3001/api/checkUserLogin', {username: "Onesinus"})
+    axios.post(BACKEND_URL+'checkUserLogin', {username: "Onesinus"})
       .then((res) => {
         if(res.data.data){
           setisLogin(res.data.data[0].isLogin);
@@ -29,7 +31,7 @@ function Layout(props) {
   }
   
   function onClickLogout(){
-    axios.post('http://localhost:3001/api/userLoggedOut', {username: "Onesinus"});  
+    axios.post(BACKEND_URL+'userLoggedOut', {username: "Onesinus"});  
     setTimeout(
         function() {
           window.location.reload();

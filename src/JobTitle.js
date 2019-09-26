@@ -16,6 +16,9 @@ import {
 
 import axios from "axios";
 
+import {BACKEND_URL} from "./config/connection";
+
+
 const { Option } = Select;
 const { confirm } = Modal;
 
@@ -70,7 +73,7 @@ function JobTitle({ form }) {
   }, []);
 
   function getDivision() {
-    axios.get("http://localhost:3001/api/listDivision").then(res => {
+    axios.get(BACKEND_URL+"listDivision").then(res => {
     let divisions = [];
     console.log(res.data.data);
     for (const [index, value] of res.data.data.entries()) {
@@ -85,7 +88,7 @@ function JobTitle({ form }) {
     setFirstLoad(true);
     setTimeout(
       function() {
-        axios.get("http://localhost:3001/api/listJobTitle").then(res => {
+        axios.get(BACKEND_URL+"listJobTitle").then(res => {
           setDataNeed(res.data.data);
         });
       }.bind(this),
@@ -117,13 +120,13 @@ function JobTitle({ form }) {
       if (!errors) {
         if (modalData == "") {
           // Add New Data
-          axios.post("http://localhost:3001/api/addJobTitle", values);
+          axios.post(BACKEND_URL+"addJobTitle", values);
         } else {
           console.log({
             id: modalData["_id"],
             update: values
           });
-          axios.post("http://localhost:3001/api/updateJobTitle", {
+          axios.post(BACKEND_URL+"updateJobTitle", {
             id: modalData["_id"],
             update: values
           });
@@ -163,7 +166,7 @@ function JobTitle({ form }) {
       okType: "danger",
       cancelText: "No",
       onOk() {
-        axios.delete("http://localhost:3001/api/deleteJobTitle", {
+        axios.delete(BACKEND_URL+"deleteJobTitle", {
           data: {
             id: record["_id"]
           }

@@ -4,6 +4,9 @@ import { Table, Input, Button, Row, Col, Divider, Icon, Tooltip, Modal, Form, Se
 
 import axios from 'axios';
 
+import {BACKEND_URL} from "./config/connection";
+
+
 const { Option } = Select;
 const { confirm } = Modal;
 
@@ -87,7 +90,7 @@ function User({
     setFirstLoad(true);
     setTimeout(
         function() {
-          axios.get('http://localhost:3001/api/getData')
+          axios.get(BACKEND_URL+'getData')
             .then((res) => {
               console.log(res);
               setDataNeed(res.data.data)
@@ -125,9 +128,9 @@ function User({
         if(modalData == ""){ // Add New Data
           values.division = dataJobTitleDivision[values.job_title];
           console.log(values);
-          axios.post('http://localhost:3001/api/putData', values);
+          axios.post(BACKEND_URL+'putData', values);
         }else{
-          axios.post('http://localhost:3001/api/updateData', {
+          axios.post(BACKEND_URL+'updateData', {
             id: modalData["_id"],
             update: values,
           });
@@ -167,7 +170,7 @@ function User({
       okType: 'danger',
       cancelText: 'No',
       onOk() {
-        axios.delete('http://localhost:3001/api/deleteData', {
+        axios.delete(BACKEND_URL+'deleteData', {
           data: {
             id: record["_id"]
           },
@@ -181,7 +184,7 @@ function User({
   }
 
   function getJobTitle() {
-    axios.get("http://localhost:3001/api/listJobTitle").then(res => {
+    axios.get(BACKEND_URL+"listJobTitle").then(res => {
       let job_title = [];
       let job_title_division = [];
       for (const [index, value] of res.data.data.entries()) {

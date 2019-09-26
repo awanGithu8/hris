@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { Table, Input, Button, Row, Col, Divider, Icon, Tooltip, Modal, Form, Select } from 'antd';
 
 import axios from 'axios';
+import {BACKEND_URL} from "./config/connection";
 
 const { Option } = Select;
 const { confirm } = Modal;
@@ -56,7 +57,7 @@ function Division({
     setFirstLoad(true);
     setTimeout(
         function() {
-          axios.get('http://localhost:3001/api/listDivision')
+          axios.get(BACKEND_URL+'listDivision')
             .then((res) => {
               setDataNeed(res.data.data)
             }
@@ -88,13 +89,13 @@ function Division({
     validateFieldsAndScroll((errors, values) => {
       if(!errors){
         if(modalData == ""){ // Add New Data
-          axios.post('http://localhost:3001/api/addDivision', values);
+          axios.post(BACKEND_URL+'addDivision', values);
         }else{
           console.log({
             id: modalData["_id"],
             update: values,
           });
-          axios.post('http://localhost:3001/api/updateDivision', {
+          axios.post(BACKEND_URL+'updateDivision', {
             id: modalData["_id"],
             update: values,
           });
@@ -134,7 +135,7 @@ function Division({
       okType: 'danger',
       cancelText: 'No',
       onOk() {
-        axios.delete('http://localhost:3001/api/deleteDivision', {
+        axios.delete(BACKEND_URL+'deleteDivision', {
           data: {
             id: record["_id"]
           },

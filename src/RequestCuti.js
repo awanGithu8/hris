@@ -14,6 +14,9 @@ import {
 import moment from "moment";
 import axios from 'axios';
 
+import {BACKEND_URL} from "./config/connection";
+
+
 const { Option } = Select;
 const { TextArea } = Input;
 const { RangePicker } = DatePicker;
@@ -40,7 +43,7 @@ function RegistrationForm({ form, props }) {
   };
 
   useEffect(() => {
-    axios.get("http://localhost:3001/api/getData").then(res => {
+    axios.get(BACKEND_URL+"getData").then(res => {
       let users = [];
       for (const [index, value] of res.data.data.entries()) {
         const {username, name, job_title, division} = value;
@@ -128,7 +131,7 @@ function RegistrationForm({ form, props }) {
 
         console.log("Received values of form: ", values);
         try{
-          axios.post('http://localhost:3001/api/addCuti', values);
+          axios.post(BACKEND_URL+'addCuti', values);
           openNotificationWithIcon('success');
           resetFields();
         }catch(e){

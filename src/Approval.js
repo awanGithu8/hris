@@ -3,6 +3,9 @@ import React, { useState, useEffect } from 'react';
 import { Table, Input, Form, Tooltip, Button, Icon, Divider, Modal, notification } from 'antd';
 
 import axios from 'axios';
+
+import {BACKEND_URL} from "./config/connection";
+
 const { confirm } = Modal;
 
 function Approval() {
@@ -97,7 +100,7 @@ function Approval() {
       okText: 'Yes',
       cancelText: 'No',
       onOk() {
-        axios.post('http://localhost:3001/api/approveCuti', {
+        axios.post(BACKEND_URL+'approveCuti', {
           id: data["_id"]
         });
         openNotificationWithIcon('success', 'approve');
@@ -119,7 +122,7 @@ function Approval() {
       okType: 'danger',
       cancelText: 'No',
       onOk() {
-        axios.post('http://localhost:3001/api/rejectCuti', {
+        axios.post(BACKEND_URL+'rejectCuti', {
           id: data["_id"]
         });
         openNotificationWithIcon('success', 'reject');
@@ -140,7 +143,7 @@ function Approval() {
     setFirstLoad(true);
     setTimeout(
         function() {
-          axios.get('http://localhost:3001/api/listApproval')
+          axios.get(BACKEND_URL+'listApproval')
             .then((res) => {
               setDataNeed(res.data.data)
             }
