@@ -14,7 +14,7 @@ const { SubMenu } = Menu;
 
 function Layout(props) {
   const [collapsed, setcollapsed] = useState(false);
-  const [isLogin, setisLogin] = useState(false);
+  const [isLogin, setisLogin] = useState(true);
 
   function toggleCollapsed(){
     setcollapsed(!collapsed)
@@ -23,7 +23,7 @@ function Layout(props) {
   function getAuth(){
     axios.post(BACKEND_URL+'checkUserLogin', {username: "Onesinus"})
       .then((res) => {
-        if(res.data.data){
+        if(res.data.data[0]){
           setisLogin(res.data.data[0].isLogin);
         }
       }
