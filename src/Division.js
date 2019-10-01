@@ -27,6 +27,12 @@ function Division({
       sorter: (a, b) => a.description.length - b.description.length,
     },
     {
+      title: 'Approver',
+      dataIndex: 'approver',
+      key: 'approver',
+      sorter: (a, b) => a.approver.length - b.approver.length,
+    },
+    {
       title: 'Action',
       dataIndex: 'action',
       key: 'action',
