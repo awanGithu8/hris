@@ -60,7 +60,7 @@ function Layout(props) {
           <Row>
             <Col span={4}>
               <NavLink to="/">
-                <div>asdas{typeof user}</div>
+                {/* <div>asdas{typeof user}</div> */}
                 <img 
                   src={logo} 
                   className="App-logo" 

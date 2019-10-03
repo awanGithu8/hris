@@ -140,6 +140,16 @@ router.delete('/deleteDivision', (req, res) => {
   });
 });
 
+
+router.get('/listApprover', (req, res) => {
+  User.find({ role: "Approver" }, function(err, data){
+    if (err) return res.json({ success: false, error: err });
+    return res.json({ success: true, data: data });
+  }).sort({
+    createdAt: -1
+  });
+});
+
 /* END API Division */
 
 /* API Job Title */
