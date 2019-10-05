@@ -91,7 +91,7 @@ function JobTitle({ form }) {
         axios.get(BACKEND_URL+"listJobTitle").then(res => {
           setDataNeed(res.data.data);
         });
-      }.bind(this),
+      },
       1000
     );
   }
@@ -118,7 +118,7 @@ function JobTitle({ form }) {
   function handleOk() {
     validateFieldsAndScroll((errors, values) => {
       if (!errors) {
-        if (modalData == "") {
+        if (modalData === "") {
           // Add New Data
           axios.post(BACKEND_URL+"addJobTitle", values);
         } else {

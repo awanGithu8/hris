@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Form, Icon, Input, Button } from 'antd';
 
 import axios from "axios";
-
+ 
 import {BACKEND_URL} from "./config/connection";
 
 function Login({ form, isLogin }) {

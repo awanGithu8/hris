@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
-import { Table, Input, Form, Tooltip, Button, Icon, Divider, Modal, notification } from 'antd';
+import { Table, Input, Form, Tooltip, Button, Icon, Modal, notification } from 'antd';
 
 import axios from 'axios';
 

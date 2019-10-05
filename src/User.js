@@ -96,8 +96,7 @@ function User({
               setDataNeed(res.data.data)
             }
           )
-        }
-        .bind(this),
+        },
         1000
     );
   }
@@ -125,7 +124,7 @@ function User({
   function handleOk() {
     validateFieldsAndScroll((errors, values) => {
       if(!errors){
-        if(modalData == ""){ // Add New Data
+        if(modalData === ""){ // Add New Data
           values.division = dataJobTitleDivision[values.job_title];
           console.log(values);
           axios.post(BACKEND_URL+'putData', values);

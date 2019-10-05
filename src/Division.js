@@ -5,7 +5,6 @@ import { Table, Input, Button, Row, Col, Divider, Icon, Tooltip, Modal, Form, Se
 import axios from 'axios';
 import {BACKEND_URL} from "./config/connection";
 
-const { Option } = Select;
 const { confirm } = Modal;
 
 function Division({

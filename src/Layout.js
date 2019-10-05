@@ -10,6 +10,9 @@ import axios from 'axios';
 
 import {BACKEND_URL} from "./config/connection";
 
+import { UserConsumer } from './context/UserContext';
+
+
 const { SubMenu } = Menu;
 
 function Layout(props) {
@@ -21,7 +24,7 @@ function Layout(props) {
   };
 
   function getAuth(){
-    axios.post(BACKEND_URL+'checkUserLogin', {username: "Onesinus"})
+    axios.post(BACKEND_URL+'checkUserLogin', {username: "Onesinus", password: "123"})
       .then((res) => {
         if(res.data.data[0]){
           setisLogin(res.data.data[0].isLogin);
@@ -52,16 +55,14 @@ function Layout(props) {
       />
     )
   }else{
+    console.log();
     return (
+      <UserConsumer>
+        {({ datalogin, login }) => (
         <Row>
           <Col span={4}>
             <NavLink to="/">
-              <img 
-                src={logo} 
-                className="App-logo" 
-                alt="logo" 
-                style={{height: "25vh"}}
-              />
+              <div>test    {login } {datalogin}</div>
             </NavLink>
             <Menu
               style={{height: "75vh", width: "16.5vw"}}
@@ -125,6 +126,8 @@ function Layout(props) {
             </div>
           </Col>
         </Row>
+        )}
+      </UserConsumer>
     );
   }
 }

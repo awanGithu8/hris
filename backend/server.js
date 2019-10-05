@@ -244,9 +244,9 @@ router.post('/rejectCuti', (req, res) => {
 
 /* Api Login */
 router.post('/checkUserLogin', (req, res) => {
-  const { username } = req.body;
+  const { username, password } = req.body;
   console.log(username);
-  User.find({ username: username }, function(err, data){
+  User.find({ username: username, password: password }, function(err, data){
     if (err) return res.json({ success: false, error: err });
     return res.json({ success: true, data: data });
   });
