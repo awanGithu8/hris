@@ -10,7 +10,7 @@ import axios from 'axios';
 
 import {BACKEND_URL} from "./config/connection";
 
-import {UserContext} from "./context/UserContext";
+import {UserContext} from "./context/userContext";
 
 const { SubMenu } = Menu;
 

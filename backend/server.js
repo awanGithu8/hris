@@ -44,7 +44,9 @@ router.get('/getData', (req, res) => {
   User.find((err, data) => {
     if (err) return res.json({ success: false, error: err });
     return res.json({ success: true, data: data });
-  });
+  }).sort({
+    username: 1
+  });;
 });
 
 // this is our update method
@@ -99,7 +101,9 @@ router.get('/listDivision', (req, res) => {
   Division.find((err, data) => {
     if (err) return res.json({ success: false, error: err });
     return res.json({ success: true, data: data });
-  });
+  }).sort({
+    description: 1
+  });;
 });
 
 router.post('/addDivision', (req, res) => {
@@ -158,7 +162,9 @@ router.get('/listJobTitle', (req, res) => {
   JobTitle.find((err, data) => {
     if (err) return res.json({ success: false, error: err });
     return res.json({ success: true, data: data });
-  });
+  }).sort({
+    description: 1
+  });;
 });
 
 router.post('/addJobTitle', (req, res) => {

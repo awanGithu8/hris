@@ -7,6 +7,8 @@ import {BACKEND_URL} from "./config/connection";
 
 const { confirm } = Modal;
 
+const { Option } = Select;
+
 function Division({
   form
 }) {
@@ -193,6 +195,7 @@ function Division({
           </Form.Item>
           <Form.Item>
             {getFieldDecorator('approver', {
+              initialValue: modalData?modalData.approver:"",
               rules: [{ required: true, message: 'Please select Approver!' }],
             })(
               <Select placeholder="Select Approver">
