@@ -15,6 +15,7 @@ function Division({
   const [modalTitle, setModalTitle] = useState("");
   const [modalData, setModalData] = useState("");
   const [data, setData] = useState([]);
+  const [dataApprover,setdataApprover] = useState([]);
 
   const [firstLoad, setFirstLoad] = useState(true)
 
@@ -24,6 +25,12 @@ function Division({
       dataIndex: 'description',
       key: 'description',
       sorter: (a, b) => a.description.length - b.description.length,
+    },
+    {
+      title: 'Approver',
+      dataIndex: 'approver',
+      key: 'approver',
+      sorter: (a, b) => a.approver.length - b.approver.length,
     },
     {
       title: 'Action',
@@ -50,7 +57,22 @@ function Division({
   
   useEffect(() => {
     refreshData();
+    getApprover();
   }, [])
+
+  function getApprover() {
+    axios.get(BACKEND_URL+"listApprover").then(res => {
+      let approver = [];
+      // let approver_division = [];
+      for (const [index, value] of res.data.data.entries()) {
+        approver.push(<Option key={index} value={value.username}>{value.username}</Option>)
+        // approver_division[value.description] = value.division;
+      }
+  
+      setdataApprover(approver);
+      // setDataJobTitleDivision(approver_division);
+    });
+  }
 
   function refreshData(){
     setFirstLoad(true);
@@ -167,6 +189,15 @@ function Division({
               <Input
                 placeholder="Description"
               />,
+            )}
+          </Form.Item>
+          <Form.Item>
+            {getFieldDecorator('approver', {
+              rules: [{ required: true, message: 'Please select Approver!' }],
+            })(
+              <Select placeholder="Select Approver">
+                {dataApprover}
+              </Select>
             )}
           </Form.Item>
         </Form>
