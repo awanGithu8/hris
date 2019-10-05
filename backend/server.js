@@ -241,10 +241,18 @@ router.post('/addCuti', (req, res) => {
 });
 
 router.post('/approveCuti', (req, res) => {
-  const { id } = req.body;
+  const { id,total} = req.body;
   Cuti.findByIdAndUpdate(id, {status: "Approved"}, (err) => {
-    if (err) return res.json({ success: false, error: err });
-    return res.json({ success: true });
+    if (err){
+      return res.json({ success: false, error: err });
+    }else{
+      // Kurangi saldo cuti user
+      User.findByIdAndUpdate(id, {remaining: remaining-total}, (err) => {});
+      // End Kurangi saldo cuti user
+      
+      return res.json({ success: true });
+    }
+
   });
 });
 
@@ -254,6 +262,15 @@ router.post('/rejectCuti', (req, res) => {
     if (err) return res.json({ success: false, error: err });
     return res.json({ success: true });
   });
+});
+
+router.get('/deleteCuti', (req, res) => {
+  Cuti.find((err, data) => {
+    data.forEach(function(cuti){
+      cuti.remove();
+    })
+  });
+  return res.json({ success: "GG cuy" });
 });
 
 /* End API Cuti */

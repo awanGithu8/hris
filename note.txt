@@ -1,4 +1,3 @@
-1. Approver itu perdivisi diassign user approver
-2 Setelah ngajuin cuti, announcement email ke hrd
-3. Ketika cuti sudah diapprove langsung kurangi saldo cuti di user
+1. Setelah ngajuin cuti, announcement email ke hrd
+2. Ketika cuti sudah diapprove langsung kurangi saldo cuti di user (sesuai jumlah cuti yang diajukan)
 
