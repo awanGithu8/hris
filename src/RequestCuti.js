@@ -8,14 +8,15 @@ import {
   Select,
   Button,
   DatePicker,
-  notification 
+  notification
 } from "antd";
 
 import moment from "moment";
-import axios from 'axios';
+import axios from "axios";
 
-import {BACKEND_URL} from "./config/connection";
+import { BACKEND_URL } from "./config/connection";
 
+import emailjs from "emailjs-com";
 
 const { Option } = Select;
 const { TextArea } = Input;
@@ -30,26 +31,36 @@ function RegistrationForm({ form, props }) {
   let working_date = addWorkDays(moment().toDate(), permitTotal); // Tue Nov 29 2016 00:00:00 GMT+0000 (GMT Standard Time)
   let currentMonth = ("0" + working_date.getMonth()).slice(-2);
   let currentDate = ("0" + working_date.getDate()).slice(-2);
-  let working_date_format = currentDate + "-" + currentMonth + "-" + working_date.getFullYear();
+  let working_date_format =
+    currentDate + "-" + currentMonth + "-" + working_date.getFullYear();
 
   const [workingDate, setWorkingDate] = useState(working_date_format);
 
   const openNotificationWithIcon = type => {
     notification[type]({
-      message: 'Add Permit Successfully added',
+      message: "Add Permit Successfully added",
       description:
-        'Your permit already added, now your permit waiting for approval',
+        "Your permit already added, now your permit waiting for approval"
     });
   };
 
   useEffect(() => {
-    axios.get(BACKEND_URL+"getData").then(res => {
+    axios.get(BACKEND_URL + "getData").then(res => {
       let users = [];
       for (const [index, value] of res.data.data.entries()) {
-        const {username, name, job_title, division} = value;
-        users.push(<Option key={index} value={username}>
-          {username +' - '+ name + ' [ ' + job_title + ' @' + division + ' ]'}
-        </Option>)
+        const { username, name, job_title, division } = value;
+        users.push(
+          <Option key={index} value={username}>
+            {username +
+              " - " +
+              name +
+              " [ " +
+              job_title +
+              " @" +
+              division +
+              " ]"}
+          </Option>
+        );
       }
       setdataUser(users);
     });
@@ -59,61 +70,59 @@ function RegistrationForm({ form, props }) {
     console.log(`selected ${value}`);
   }
 
-  function workday_count(startDate, endDate) { 
+  function workday_count(startDate, endDate) {
     var day = moment(startDate);
     var businessDays = 0;
 
-    while (day.isSameOrBefore(endDate,'day')) {
-      if (day.day()!=0 && day.day()!=6) businessDays++;
-      day.add(1,'d');
+    while (day.isSameOrBefore(endDate, "day")) {
+      if (day.day() != 0 && day.day() != 6) businessDays++;
+      day.add(1, "d");
     }
     return businessDays;
   }
-  
+
   function addWorkDays(startDate, days) {
-    if(isNaN(days)) {
-        console.log("Value provided for \"days\" was not a number");
-        return
+    if (isNaN(days)) {
+      console.log('Value provided for "days" was not a number');
+      return;
     }
-    if(!(startDate instanceof Date)) {
-        console.log("Value provided for \"startDate\" was not a Date object");
-        return
+    if (!(startDate instanceof Date)) {
+      console.log('Value provided for "startDate" was not a Date object');
+      return;
     }
     // Get the day of the week as a number (0 = Sunday, 1 = Monday, .... 6 = Saturday)
     var dow = startDate.getDay();
     var daysToAdd = parseInt(days);
     // If the current day is Sunday add one day
-    if (dow == 0)
-        daysToAdd++;
+    if (dow == 0) daysToAdd++;
     // If the start date plus the additional days falls on or after the closest Saturday calculate weekends
     if (dow + daysToAdd >= 6) {
-        //Subtract days in current working week from work days
-        var remainingWorkDays = daysToAdd - (5 - dow);
-        //Add current working week's weekend
-        daysToAdd += 2;
-        if (remainingWorkDays > 5) {
-            //Add two days for each working week by calculating how many weeks are included
-            daysToAdd += 2 * Math.floor(remainingWorkDays / 5);
-            //Exclude final weekend if remainingWorkDays resolves to an exact number of weeks
-            if (remainingWorkDays % 5 == 0)
-                daysToAdd -= 2;
-        }
+      //Subtract days in current working week from work days
+      var remainingWorkDays = daysToAdd - (5 - dow);
+      //Add current working week's weekend
+      daysToAdd += 2;
+      if (remainingWorkDays > 5) {
+        //Add two days for each working week by calculating how many weeks are included
+        daysToAdd += 2 * Math.floor(remainingWorkDays / 5);
+        //Exclude final weekend if remainingWorkDays resolves to an exact number of weeks
+        if (remainingWorkDays % 5 == 0) daysToAdd -= 2;
+      }
     }
     startDate.setDate(startDate.getDate() + daysToAdd);
     return startDate;
-}
-
+  }
 
   function onChangeDate(dates, dateStrings) {
-    let permit_total = workday_count(dates[0],dates[1]);
+    let permit_total = workday_count(dates[0], dates[1]);
     let working_date = addWorkDays(dates[0].toDate(), permit_total); // Tue Nov 29 2016 00:00:00 GMT+0000 (GMT Standard Time)
-    
+
     let date = ("0" + working_date.getDate()).slice(-2);
     let month = ("0" + working_date.getMonth()).slice(-2);
 
-    let working_date_format = date + "-" + month + "-" + working_date.getFullYear();
+    let working_date_format =
+      date + "-" + month + "-" + working_date.getFullYear();
     setWorkingDate(working_date_format);
-    setPermitTotal(permit_total)
+    setPermitTotal(permit_total);
   }
 
   function handleSubmit(e) {
@@ -122,19 +131,46 @@ function RegistrationForm({ form, props }) {
       if (!err) {
         values.from_date = values.date[0].format("DD-MM-YYYY");
         values.to_date = values.date[1].format("DD-MM-YYYY");
-        
+
         delete values["date"];
 
         values.total_days = permitTotal;
         values.work_date = workingDate;
 
-
         console.log("Received values of form: ", values);
-        try{
-          axios.post(BACKEND_URL+'addCuti', values);
-          openNotificationWithIcon('success');
+        try {
+          axios.post(BACKEND_URL + "addCuti", values);
+          openNotificationWithIcon("success");
           resetFields();
-        }catch(e){
+
+          /* Send Email start */
+          const templateParams = {
+            name: values.name,
+            type: values.type,
+            reason: values.reason,
+            from_date: values.from_date,
+            to_date: values.to_date,
+            total_days: values.total_days,
+            work_date: values.work_date
+          };
+
+          emailjs
+            .send(
+              "gmail",
+              "template_lWWmau5h",
+              templateParams,
+              "user_eSLT70utivabYk1qRYlEa"
+            )
+            .then(
+              response => {
+                console.log("SUCCESS!", response.status, response.text);
+              },
+              err => {
+                console.log("FAILED...", err);
+              }
+            );
+          /* Send Email End */
+        } catch (e) {
           console.log("Something went wrong " + e);
         }
       }
@@ -227,7 +263,7 @@ function RegistrationForm({ form, props }) {
             </span>
           }
         >
-          {getFieldDecorator("date", {            
+          {getFieldDecorator("date", {
             initialValue: [moment(), moment()]
           })(
             <RangePicker
@@ -240,15 +276,20 @@ function RegistrationForm({ form, props }) {
               }}
               onChange={onChangeDate}
               allowClear={false}
-            />              
+            />
           )}
         </Form.Item>
-        <span style={{
-          marginLeft: "15vw",
-        }}>
-          <b><i>Total: {permitTotal} Days</i></b>
+        <span
+          style={{
+            marginLeft: "15vw"
+          }}
+        >
+          <b>
+            <i>Total: {permitTotal} Days</i>
+          </b>
         </span>
-        <br/><br/>
+        <br />
+        <br />
         <Form.Item
           label={
             <span>
