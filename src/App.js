@@ -14,13 +14,13 @@ import RequestCuti from "./RequestCuti";
 
 import { Route, HashRouter } from "react-router-dom";
 
-import UserContext from "./context/UserContext";
+import { UserProvider } from "./context/UserContext";
 
 function App() {
   return (
     <div className="App">
-      <UserContext.Provider value={[]}>
-        <HashRouter>
+      <HashRouter>
+        <UserProvider>
           <Layout>
             <header className="App-header">
               <Route exact path="/" component={Home} />
@@ -34,8 +34,8 @@ function App() {
               <Route path="/login" component={Login} />
             </header>
           </Layout>
-        </HashRouter>
-      </UserContext.Provider>
+        </UserProvider>
+      </HashRouter>
     </div>
   );
 }
