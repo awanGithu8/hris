@@ -14,7 +14,7 @@ import RequestCuti from "./RequestCuti";
 
 import { Route, HashRouter } from "react-router-dom";
 
-import { UserContext, users } from "./context/userContext";
+import UserContext from "./context/UserContext";
 
 function App() {
   return (
