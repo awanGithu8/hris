@@ -34,3 +34,7 @@ code {
 .login-form-button {
   width: 100%;
 }
+
+.mb-5{
+  margin-bottom: 5px !important;
+}

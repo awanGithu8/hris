@@ -8,7 +8,10 @@ import {
   Select,
   Button,
   DatePicker,
-  notification
+  notification,
+  Row,
+  Col,
+  Table
 } from "antd";
 
 import moment from "moment";
@@ -17,6 +20,7 @@ import axios from "axios";
 import { BACKEND_URL } from "./config/connection";
 
 import emailjs from "emailjs-com";
+import "./css/cuti.css";
 
 const { Option } = Select;
 const { TextArea } = Input;
@@ -200,6 +204,80 @@ function RegistrationForm({ form, props }) {
     }
   };
 
+  const mb5 = "mb-5";
+
+  const columns = [
+    {
+      title: "Type",
+      dataIndex: "type",
+      key: "type",
+      width: 75,
+    },
+    {
+      title: "From Date",
+      dataIndex: "from_date",
+      key: "from_date",
+      width: 150
+    },
+    {
+      title: "To Date",
+      dataIndex: "to_date",
+      key: "to_date",
+      width: 150
+    },
+    {
+      title: "Total",
+      dataIndex: "total_days",
+      key: "total_days",
+      align: "right",
+      sorter: (a, b) => a.total_days - b.total_days,
+      width: 75
+    },
+    {
+      title: "Working",
+      dataIndex: "work_date",
+      key: "work_date",
+      width: 150
+    },
+    {
+      title: "Reason",
+      dataIndex: "reason",
+      key: "reason",
+      width: 300
+    },
+    {
+      title: "Status",
+      dataIndex: "status",
+      key: "status"
+    }
+  ];
+
+  const [dataSource, setdataSource] = useState([]);
+  const [data, setData] = useState([]);
+  const [firstLoad, setFirstLoad] = useState(true);
+
+  function setDataNeed(skiw) {
+    setdataSource(skiw);
+    setData(skiw);
+    setFirstLoad(false);
+  }
+
+  function refreshData() {
+    setFirstLoad(true);
+    setTimeout(
+      function() {
+        axios.get(BACKEND_URL + "listCuti").then(res => {
+          setDataNeed(res.data.data);
+        });
+      }.bind(this),
+      1000
+    );
+  }
+
+  useEffect(() => {
+    refreshData();
+  }, []);
+
   return (
     <React.Fragment>
       <center>
@@ -207,6 +285,7 @@ function RegistrationForm({ form, props }) {
       </center>
       <Form {...formItemLayout} onSubmit={handleSubmit} hideRequiredMark>
         <Form.Item
+          className={mb5}
           label={
             <span>
               Requester&nbsp;
@@ -235,6 +314,7 @@ function RegistrationForm({ form, props }) {
               </Tooltip>
             </span>
           }
+          className={mb5}
         >
           {getFieldDecorator("type", {
             initialValue: "Annual Leave",
@@ -253,44 +333,45 @@ function RegistrationForm({ form, props }) {
             </Select>
           )}
         </Form.Item>
+        <Row>
+          <Col span={2}></Col>
+          <Col span={12} style={{ marginRight: "-10%" }}>
+            <Form.Item
+              className={mb5}
+              label={
+                <span>
+                  Permit Date&nbsp;
+                  <Tooltip title="Permit Date Range">
+                    <Icon type="question-circle-o" />
+                  </Tooltip>
+                </span>
+              }
+            >
+              {getFieldDecorator("date", {
+                initialValue: [moment(), moment()]
+              })(
+                <RangePicker
+                  ranges={{
+                    Today: [moment(), moment()],
+                    "This Month": [
+                      moment().startOf("month"),
+                      moment().endOf("month")
+                    ]
+                  }}
+                  onChange={onChangeDate}
+                  allowClear={false}
+                />
+              )}
+            </Form.Item>
+          </Col>
+          <Col span={3}>
+            <b>
+              <i>Total: {permitTotal} Days</i>
+            </b>
+          </Col>
+        </Row>
         <Form.Item
-          label={
-            <span>
-              Permit Date&nbsp;
-              <Tooltip title="Permit Date Range">
-                <Icon type="question-circle-o" />
-              </Tooltip>
-            </span>
-          }
-        >
-          {getFieldDecorator("date", {
-            initialValue: [moment(), moment()]
-          })(
-            <RangePicker
-              ranges={{
-                Today: [moment(), moment()],
-                "This Month": [
-                  moment().startOf("month"),
-                  moment().endOf("month")
-                ]
-              }}
-              onChange={onChangeDate}
-              allowClear={false}
-            />
-          )}
-        </Form.Item>
-        <span
-          style={{
-            marginLeft: "15vw"
-          }}
-        >
-          <b>
-            <i>Total: {permitTotal} Days</i>
-          </b>
-        </span>
-        <br />
-        <br />
-        <Form.Item
+          className={mb5}
           label={
             <span>
               Reason&nbsp;
@@ -309,12 +390,21 @@ function RegistrationForm({ form, props }) {
             />
           )}
         </Form.Item>
-        <Form.Item {...tailFormItemLayout}>
+        <Form.Item {...tailFormItemLayout} className={mb5}>
           <Button type="primary" htmlType="submit">
             Request
           </Button>
         </Form.Item>
       </Form>
+      <h5>Permit History</h5>
+      <Table
+        dataSource={dataSource}
+        columns={columns}
+        pagination={false}
+        rowKey="_id"
+        loading={firstLoad}
+        scroll={{ y: 240 }}
+      />
     </React.Fragment>
   );
 }
