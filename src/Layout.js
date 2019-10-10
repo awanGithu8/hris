@@ -76,10 +76,11 @@ function Layout(props) {
         <Col span={4}>
           <NavLink to="/">
             <img
-              src={logo}
+              // src={logo}
+              src={"/sindata.png"}
               className="App-logo"
               alt="logo"
-              style={{ height: "25vh" }}
+              style={{ height: "25vh", width: "16.5vw", border: "15px solid #001529" }}
             />
           </NavLink>
           <Menu
