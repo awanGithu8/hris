@@ -5,10 +5,10 @@ const bodyParser = require('body-parser');
 const logger = require('morgan');
 
 /* Import Schema */
-  const User = require('./user');
-  const Division = require('./division');
-  const JobTitle = require('./job_title');
-  const Cuti = require('./cuti');
+const User = require('./user');
+const Division = require('./division');
+const JobTitle = require('./job_title');
+const Cuti = require('./cuti');
 /* End Import Schema */
 
 const API_PORT = 3001;
@@ -20,7 +20,7 @@ const router = express.Router();
 const dbRoute =
   // 'mongodb+srv://sindata:sindata@sindatadb-eyfmi.mongodb.net/test?retryWrites=true&w=majority'
 
- 'mongodb+srv://santuy:santuy@santuycluster-9nevr.gcp.mongodb.net/test?retryWrites=true&w=majority';
+  'mongodb+srv://santuy:santuy@santuycluster-9nevr.gcp.mongodb.net/test?retryWrites=true&w=majority';
 
 // connects our back end code with the database
 mongoose.connect(dbRoute, { useNewUrlParser: true });
@@ -77,9 +77,9 @@ router.post('/putData', (req, res) => {
   const { username, role } = req.body;
 
   for (var key in req.body) {
-      if (req.body.hasOwnProperty(key)) {
-          data[key] = req.body[key];
-      }
+    if (req.body.hasOwnProperty(key)) {
+      data[key] = req.body[key];
+    }
   }
 
   if (username == "" && role == "") {
@@ -110,9 +110,9 @@ router.post('/addDivision', (req, res) => {
   let data = new Division();
 
   for (var key in req.body) {
-      if (req.body.hasOwnProperty(key)) {
-          data[key] = req.body[key];
-      }
+    if (req.body.hasOwnProperty(key)) {
+      data[key] = req.body[key];
+    }
   }
 
   if (req.body.description == "") {
@@ -146,7 +146,7 @@ router.delete('/deleteDivision', (req, res) => {
 
 
 router.get('/listApprover', (req, res) => {
-  User.find({ role: "Approver" }, function(err, data){
+  User.find({ role: "Approver" }, function (err, data) {
     if (err) return res.json({ success: false, error: err });
     return res.json({ success: true, data: data });
   }).sort({
@@ -171,9 +171,9 @@ router.post('/addJobTitle', (req, res) => {
   let data = new JobTitle();
 
   for (var key in req.body) {
-      if (req.body.hasOwnProperty(key)) {
-          data[key] = req.body[key];
-      }
+    if (req.body.hasOwnProperty(key)) {
+      data[key] = req.body[key];
+    }
   }
 
   if (req.body.description == "" || req.body.division == "") {
@@ -208,7 +208,7 @@ router.delete('/deleteJobTitle', (req, res) => {
 
 /* API Cuti */
 router.get('/listCuti', (req, res) => {
-  Cuti.find(function(err, data){
+  Cuti.find(function (err, data) {
     if (err) return res.json({ success: false, error: err });
     return res.json({ success: true, data: data });
   }).sort({
@@ -219,7 +219,7 @@ router.get('/listCuti', (req, res) => {
 router.post('/listCutiUser', (req, res) => {
   const { username } = req.body;
 
-  Cuti.find({ name: username }, function(err, data){
+  Cuti.find({ name: username }, function (err, data) {
     if (err) return res.json({ success: false, error: err });
     return res.json({ success: true, data: data });
   }).sort({
@@ -228,7 +228,7 @@ router.post('/listCutiUser', (req, res) => {
 });
 
 router.get('/listApproval', (req, res) => {
-  Cuti.find({ status: "Waiting For Approval" }, function(err, data){
+  Cuti.find({ status: "Waiting For Approval" }, function (err, data) {
     if (err) return res.json({ success: false, error: err });
     return res.json({ success: true, data: data });
   }).sort({
@@ -240,9 +240,9 @@ router.post('/addCuti', (req, res) => {
   let data = new Cuti();
 
   for (var key in req.body) {
-      if (req.body.hasOwnProperty(key)) {
-          data[key] = req.body[key];
-      }
+    if (req.body.hasOwnProperty(key)) {
+      data[key] = req.body[key];
+    }
   }
 
   data.save((err) => {
@@ -252,24 +252,36 @@ router.post('/addCuti', (req, res) => {
 });
 
 router.post('/approveCuti', (req, res) => {
-  const { id,total} = req.body;
-  Cuti.findByIdAndUpdate(id, {status: "Approved"}, (err) => {
-    if (err){
-      return res.json({ success: false, error: err });
-    }else{
-      // Kurangi saldo cuti user
-      User.findByIdAndUpdate(id, {remaining: remaining-total}, (err) => {});
-      // End Kurangi saldo cuti user
-      
-      return res.json({ success: true });
-    }
+  const { id, total_days, requester } = req.body;
 
+  User.find({ username: requester }, function (err, datauser) {
+    let {remaining} = datauser[0];
+    let id_user = datauser[0].id;
+
+    if (!err) {
+      Cuti.findByIdAndUpdate(id, { status: "Approved" }, (err) => {
+        if (err) {
+          return res.json({ success: false, error: err });
+        } else {
+          // Kurangi saldo cuti user
+          console.log(remaining);
+          console.log(total_days);
+          console.log(id_user);
+          console.log("gajelassss ====== " + datauser.remaining-total_days);
+          User.findByIdAndUpdate(id_user, { remaining: remaining - total_days }, (err) => { });
+          // End Kurangi saldo cuti user
+
+          return res.json({ success: true });
+        }
+      });
+    }
   });
+
 });
 
 router.post('/rejectCuti', (req, res) => {
   const { id } = req.body;
-  Cuti.findByIdAndUpdate(id, {status: "Rejected"}, (err) => {
+  Cuti.findByIdAndUpdate(id, { status: "Rejected" }, (err) => {
     if (err) return res.json({ success: false, error: err });
     return res.json({ success: true });
   });
@@ -277,7 +289,7 @@ router.post('/rejectCuti', (req, res) => {
 
 router.get('/deleteCuti', (req, res) => {
   Cuti.find((err, data) => {
-    data.forEach(function(cuti){
+    data.forEach(function (cuti) {
       cuti.remove();
     })
   });
@@ -290,7 +302,7 @@ router.get('/deleteCuti', (req, res) => {
 router.post('/checkUserLogin', (req, res) => {
   const { username, password } = req.body;
   console.log(username);
-  User.find({ username: username, password: password }, function(err, data){
+  User.find({ username: username, password: password }, function (err, data) {
     if (err) return res.json({ success: false, error: err });
     return res.json({ success: true, data: data });
   });
@@ -300,14 +312,14 @@ router.post('/userLoggedIn', (req, res) => {
   User.findOneAndUpdate(req.body, { isLogin: true }, {}, function (err, data) {
     if (err) return res.json({ success: false, error: err });
     return res.json({ success: true, data: data });
-  });  
+  });
 });
 
 router.post('/userLoggedOut', (req, res) => {
   User.findOneAndUpdate(req.body, { isLogin: false }, {}, function (err, data) {
     if (err) return res.json({ success: false, error: err });
     return res.json({ success: true, data: data });
-  });  
+  });
 });
 /* End Api Login */
 

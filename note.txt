@@ -1,5 +1,0 @@
-3. Menu approver hanya bisa diakses oleh role approver,super admin bisa akses semua menu, user hanya bisa permit request
-2. di menu permit request tampilkan table list request dari user yang login 
-1. Ketika cuti sudah diapprove langsung kurangi saldo cuti di user (sesuai jumlah cuti yang diajukan)
-
-
