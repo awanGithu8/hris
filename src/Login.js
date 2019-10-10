@@ -1,5 +1,5 @@
 import React, {useContext} from 'react';
-import { Form, Icon, Input, Button } from 'antd';
+import { Form, Icon, Input, Button, message } from 'antd';
 
 import axios from "axios";
 
@@ -17,7 +17,11 @@ function Login({ form }) {
         validateFields((err, values) => {
             if (!err) {
                 axios.post(BACKEND_URL + 'userLoggedIn', values).then(response => {
-                    user.setuser(response.data.data)
+                    if(response.data.data == null){
+                        message.warning("Invalid username or password");
+                    }else{
+                        user.setuser(response.data.data)
+                    }
                 }).catch(err => {
                     console.log(err);
                 });

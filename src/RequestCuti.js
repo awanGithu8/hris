@@ -29,6 +29,7 @@ const { RangePicker } = DatePicker;
 
 function RegistrationForm({ form, props }) {
   const user = useContext(UserContext);
+  let session_user = JSON.parse(window.localStorage.getItem('datauser'));
 
   const { getFieldDecorator, validateFieldsAndScroll, resetFields } = form;
 
@@ -271,7 +272,7 @@ function RegistrationForm({ form, props }) {
       function() {
         axios
           .post(BACKEND_URL + "listCutiUser", {
-            username: user.datauser.username
+            username: session_user.username
           })
           .then(res => {
             console.log(res);

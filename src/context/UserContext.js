@@ -4,15 +4,17 @@ export const UserContext = createContext()
 
 export class UserProvider extends React.Component {
     setuser = newuser => {
-        this.setState({ datauser: newuser });
+        newuser.password = "******Hacker kau cok?******";
+        window.localStorage.setItem('datauser', JSON.stringify(newuser));
+        window.location = window.location.origin;
     };
 
-    logoutuser = name => {
-        this.setState({ datauser: [] });
+    logoutuser = () => {
+        window.localStorage.setItem('datauser', null);
+        window.location = window.location.origin;
     };
 
     state = {
-        datauser: [],
         setuser: this.setuser,
         logoutuser: this.logoutuser
     };

@@ -17,8 +17,8 @@ const { SubMenu } = Menu;
 
 function Layout(props) {
   const user = useContext(UserContext);
-  const { role, isLogin, username } = user.datauser ? user.datauser : { role: "", isLogin: false, username: "" };
-  console.log(user);
+  let session_user = JSON.parse(window.localStorage.getItem('datauser'));
+  const { role, isLogin, username } = session_user ? session_user : { role: "", isLogin: false, username: "" };
 
   // const [collapsed, setcollapsed] = useState(false);
   // const [isLogin, setisLogin] = useState(false);
@@ -48,7 +48,7 @@ function Layout(props) {
 
   function onClickLogout() {
     axios.post(BACKEND_URL + 'userLoggedOut', { username: username }).then(response => {
-      user.setuser([]);
+      user.logoutuser();
       // removeHashFromUrl()
     }).catch(err => {
       console.log(err);
@@ -60,11 +60,7 @@ function Layout(props) {
   //   getAuth();
   // }, [])
 
-  if (!isLogin) {
-    if (user.datauser == null) {
-      message.info("Invalid Username or Password");
-    }
-
+  if (session_user == null) {
     return (
       <Login
 

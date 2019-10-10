@@ -1,13 +1,13 @@
-import React, {useContext} from "react";
-import {UserContext} from "./context/UserContext";
+import React from "react";
 
 export default function Home(){
-    const user = useContext(UserContext);
+    let session_user = JSON.parse(window.localStorage.getItem('datauser'));
+
     return (
         <div>
             <center>Santuy Human Resources Information System</center> 
             <br/><br/>
-            Welcome {user.datauser.name}
+            Welcome {session_user.name}
         </div>    
     );
 }
