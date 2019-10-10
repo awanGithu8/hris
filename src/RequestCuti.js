@@ -297,9 +297,9 @@ function RegistrationForm({ form, props }) {
           label={
             <span>
               Requester&nbsp;
-              <Tooltip title="Requester Name">
+              {/* <Tooltip title="Requester Name">
                 <Icon type="question-circle-o" />
-              </Tooltip>
+              </Tooltip> */}
             </span>
           }
         >
@@ -317,9 +317,9 @@ function RegistrationForm({ form, props }) {
           label={
             <span>
               Type&nbsp;
-              <Tooltip title="Type of Permit">
+              {/* <Tooltip title="Type of Permit">
                 <Icon type="question-circle-o" />
-              </Tooltip>
+              </Tooltip> */}
             </span>
           }
           className={mb5}
@@ -349,9 +349,9 @@ function RegistrationForm({ form, props }) {
               label={
                 <span>
                   Permit Date&nbsp;
-                  <Tooltip title="Permit Date Range">
+                  {/* <Tooltip title="Permit Date Range">
                     <Icon type="question-circle-o" />
-                  </Tooltip>
+                  </Tooltip> */}
                 </span>
               }
             >
@@ -383,9 +383,9 @@ function RegistrationForm({ form, props }) {
           label={
             <span>
               Reason&nbsp;
-              <Tooltip title="Permit Reason">
+              {/* <Tooltip title="Permit Reason">
                 <Icon type="question-circle-o" />
-              </Tooltip>
+              </Tooltip> */}
             </span>
           }
         >
