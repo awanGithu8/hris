@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
+import { UserContext } from "./context/UserContext";
 
 import {
   Form,
@@ -27,6 +28,8 @@ const { TextArea } = Input;
 const { RangePicker } = DatePicker;
 
 function RegistrationForm({ form, props }) {
+  const user = useContext(UserContext);
+
   const { getFieldDecorator, validateFieldsAndScroll, resetFields } = form;
 
   const [dataUser, setdataUser] = useState([]);
@@ -211,7 +214,7 @@ function RegistrationForm({ form, props }) {
       title: "Type",
       dataIndex: "type",
       key: "type",
-      width: 75,
+      width: 75
     },
     {
       title: "From Date",
@@ -266,9 +269,14 @@ function RegistrationForm({ form, props }) {
     setFirstLoad(true);
     setTimeout(
       function() {
-        axios.get(BACKEND_URL + "listCuti").then(res => {
-          setDataNeed(res.data.data);
-        });
+        axios
+          .post(BACKEND_URL + "listCutiUser", {
+            username: user.datauser.username
+          })
+          .then(res => {
+            console.log(res);
+            setDataNeed(res.data.data);
+          });
       }.bind(this),
       1000
     );

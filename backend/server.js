@@ -216,6 +216,17 @@ router.get('/listCuti', (req, res) => {
   });
 });
 
+router.post('/listCutiUser', (req, res) => {
+  const { username } = req.body;
+
+  Cuti.find({ name: username }, function(err, data){
+    if (err) return res.json({ success: false, error: err });
+    return res.json({ success: true, data: data });
+  }).sort({
+    createdAt: -1
+  });
+});
+
 router.get('/listApproval', (req, res) => {
   Cuti.find({ status: "Waiting For Approval" }, function(err, data){
     if (err) return res.json({ success: false, error: err });
