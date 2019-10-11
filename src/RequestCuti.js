@@ -4,8 +4,6 @@ import { UserContext } from "./context/UserContext";
 import {
   Form,
   Input,
-  Tooltip,
-  Icon,
   Select,
   Button,
   DatePicker,
@@ -27,8 +25,7 @@ const { Option } = Select;
 const { TextArea } = Input;
 const { RangePicker } = DatePicker;
 
-function RegistrationForm({ form, props }) {
-  const user = useContext(UserContext);
+function RegistrationForm({ form }) {
   let session_user = JSON.parse(window.localStorage.getItem('datauser'));
 
   const { getFieldDecorator, validateFieldsAndScroll, resetFields } = form;
@@ -57,18 +54,21 @@ function RegistrationForm({ form, props }) {
       let users = [];
       for (const [index, value] of res.data.data.entries()) {
         const { username, name, job_title, division } = value;
-        users.push(
-          <Option key={index} value={username}>
-            {username +
-              " - " +
-              name +
-              " [ " +
-              job_title +
-              " @" +
-              division +
-              " ]"}
-          </Option>
-        );
+        console.log(session_user);
+        if(session_user.role == "Administrator" || session_user.username === username){
+          users.push(
+            <Option key={index} value={username}>
+              {username +
+                " - " +
+                name +
+                " [ " +
+                job_title +
+                " @" +
+                division +
+                " ]"}
+            </Option>
+          );
+        }
       }
       setdataUser(users);
     });
@@ -120,7 +120,7 @@ function RegistrationForm({ form, props }) {
     return startDate;
   }
 
-  function onChangeDate(dates, dateStrings) {
+  function onChangeDate(dates) {
     let permit_total = workday_count(dates[0], dates[1]);
     let working_date = addWorkDays(dates[0].toDate(), permit_total); // Tue Nov 29 2016 00:00:00 GMT+0000 (GMT Standard Time)
 
@@ -257,7 +257,7 @@ function RegistrationForm({ form, props }) {
   ];
 
   const [dataSource, setdataSource] = useState([]);
-  const [data, setData] = useState([]);
+  const [, setData] = useState([]);
   const [firstLoad, setFirstLoad] = useState(true);
 
   function setDataNeed(skiw) {
