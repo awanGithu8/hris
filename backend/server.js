@@ -227,7 +227,16 @@ router.post('/listCutiUser', (req, res) => {
   });
 });
 
-router.get('/listApproval', (req, res) => {
+router.post('/listApproval', (req, res) => {
+  const { division } = req.body;
+
+  // Kudunya hanya tampilkan daftar approve dari approver perdivisi, azab ga pake relasi wkwkwk
+  // User.find({ division: division }, function (err, datauser) {
+  //   var list_users = datauser.map(a => a.username);
+
+  //   console.log(list_users);
+  // });
+
   Cuti.find({ status: "Waiting For Approval" }, function (err, data) {
     if (err) return res.json({ success: false, error: err });
     return res.json({ success: true, data: data });

@@ -9,6 +9,8 @@ import {BACKEND_URL} from "./config/connection";
 const { confirm } = Modal;
 
 function Approval() {
+  let session_user = JSON.parse(window.localStorage.getItem('datauser'));
+
   let msg = [];
   msg['approve'] = ['Permit Successfully approved','Permit has been approved'];
   msg['reject'] = ['Permit Successfully rejected','Permit has been rejected'];
@@ -147,7 +149,9 @@ function Approval() {
     setFirstLoad(true);
     setTimeout(
         function() {
-          axios.get(BACKEND_URL+'listApproval')
+          axios.post(BACKEND_URL+'listApproval', {
+            division: session_user.division
+          })
             .then((res) => {
               setDataNeed(res.data.data)
             }
