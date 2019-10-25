@@ -11,7 +11,8 @@ import {
   Tooltip,
   Modal,
   Form,
-  Select
+  Select,
+  InputNumber
 } from "antd";
 
 import axios from "axios";
@@ -238,7 +239,7 @@ function User({ form }) {
               />
             )}
           </Form.Item>
-          {modalData.username && (
+          {!modalData.username && (
             <Form.Item>
               {getFieldDecorator("password", {
                 rules: [
@@ -293,10 +294,8 @@ function User({ form }) {
                 { required: true, message: "Please input Permit Remaining!" }
               ]
             })(
-              <Input
-                prefix={
-                  <Icon type="user" style={{ color: "rgba(0,0,0,.25)" }} />
-                }
+              <InputNumber
+                style={{width: "100%"}}
                 placeholder="Permit Remaining"
               />
             )}
