@@ -253,7 +253,7 @@ function User({
           </Form.Item>
           <Form.Item>
             {getFieldDecorator('role', {
-               initialValue: modalData?modalData.role:"Administrator",
+               initialValue: modalData?modalData.role:undefined,
               rules: [{ required: true, message: 'Please Select Role' }],
             })(
               <Select placeholder="Role">
