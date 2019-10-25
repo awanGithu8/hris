@@ -24,13 +24,17 @@ const { confirm } = Modal;
 
 function User({ form }) {
   const [dataSource, setdataSource] = useState([]);
+
   const [ModalUserVisible, setModalUserVisible] = useState(false);
   const [modalTitle, setModalTitle] = useState("");
   const [modalData, setModalData] = useState("");
+
   const [data, setData] = useState([]);
   const [dataJobTitle, setdataJobTitle] = useState([]);
   const [dataJobTitleDivision, setDataJobTitleDivision] = useState([]);
   const [dataJobTitleDescription, setDataJobTitleDescription] = useState([]);
+
+  const [division, setDivision] = useState([]);
 
   const [firstLoad, setFirstLoad] = useState(true);
 
@@ -50,15 +54,18 @@ function User({ form }) {
     {
       title: "Division",
       dataIndex: "division_id",
-      key: "division_id"
+      key: "division_id",
+      render: text => {
+        return division[text];
+      }
     },
     {
       title: "Job Title",
       dataIndex: "job_title_id",
       key: "job_title_id",
-      render: (text) => {
+      render: text => {
         return dataJobTitleDescription[text];
-      },
+      }
     },
     {
       title: "Remaining Permit",
@@ -97,6 +104,7 @@ function User({ form }) {
   useEffect(() => {
     refreshData();
     getJobTitle();
+    getDivision();
   }, []);
 
   function refreshData() {
@@ -130,10 +138,10 @@ function User({ form }) {
 
   function handleOk() {
     validateFieldsAndScroll((errors, values) => {
-      if (!errors) {        
+      if (!errors) {
+        values.division_id = dataJobTitleDivision[values.job_title_id];
         if (modalData === "") {
           // Add New Data
-          values.division_id = dataJobTitleDivision[values.job_title_id];
           console.log(values);
           axios.post(BACKEND_URL + "putData", values);
         } else {
@@ -187,6 +195,18 @@ function User({ form }) {
       onCancel() {
         console.log("Cancel");
       }
+    });
+  }
+
+  function getDivision() {
+    axios.get(BACKEND_URL + "listDivision").then(res => {
+      let division = [];
+
+      for (const [index, value] of res.data.data.entries()) {
+        division[value["_id"]] = value.description;
+      }
+
+      setDivision(division);
     });
   }
 
@@ -295,7 +315,7 @@ function User({ form }) {
               ]
             })(
               <InputNumber
-                style={{width: "100%"}}
+                style={{ width: "100%" }}
                 placeholder="Permit Remaining"
               />
             )}
