@@ -175,7 +175,7 @@ router.post("/addJobTitle", (req, res) => {
     }
   }
 
-  if (req.body.description == "" || req.body.division == "") {
+  if (req.body.description == "" || req.body.division_id == "") {
     return res.json({
       success: false,
       error: "Description and Division is required"

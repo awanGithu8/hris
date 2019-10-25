@@ -16,8 +16,7 @@ import {
 
 import axios from "axios";
 
-import {BACKEND_URL} from "./config/connection";
-
+import { BACKEND_URL } from "./config/connection";
 
 const { Option } = Select;
 const { confirm } = Modal;
@@ -28,7 +27,9 @@ function JobTitle({ form }) {
   const [modalTitle, setModalTitle] = useState("");
   const [modalData, setModalData] = useState("");
   const [data, setData] = useState([]);
+
   const [dataDivision, setdataDivision] = useState([]);
+  const [arrDivision, setArrDivision] = useState([]);
 
   const [firstLoad, setFirstLoad] = useState(true);
 
@@ -41,9 +42,13 @@ function JobTitle({ form }) {
     },
     {
       title: "Division",
-      dataIndex: "division",
-      key: "division",
-      sorter: (a, b) => a.division.length - b.division.length
+      dataIndex: "division_id",
+      key: "division_id",
+      render: (text, row, index) => {
+        return arrDivision[text];
+      },
+      sorter: (a, b) =>
+        arrDivision[b.division_id].length - arrDivision[a.division_id].length
     },
     {
       title: "Action",
@@ -73,27 +78,32 @@ function JobTitle({ form }) {
   }, []);
 
   function getDivision() {
-    axios.get(BACKEND_URL+"listDivision").then(res => {
-    let divisions = [];
-    console.log(res.data.data);
-    for (const [index, value] of res.data.data.entries()) {
-        divisions.push(<Option key={index} value={value.description}>{value.description}</Option>)
-    }
-    
+    axios.get(BACKEND_URL + "listDivision").then(res => {
+      let divisions = [];
+      let arr_division = [];
+
+      for (const [index, value] of res.data.data.entries()) {
+        arr_division[value["_id"]] = value.description;
+
+        divisions.push(
+          <Option key={index} value={value["_id"]}>
+            {value.description}
+          </Option>
+        );
+      }
+
+      setArrDivision(arr_division);
       setdataDivision(divisions);
     });
   }
 
   function refreshData() {
     setFirstLoad(true);
-    setTimeout(
-      function() {
-        axios.get(BACKEND_URL+"listJobTitle").then(res => {
-          setDataNeed(res.data.data);
-        });
-      },
-      1000
-    );
+    setTimeout(function() {
+      axios.get(BACKEND_URL + "listJobTitle").then(res => {
+        setDataNeed(res.data.data);
+      });
+    }, 1000);
   }
 
   function setDataNeed(skiw) {
@@ -107,10 +117,9 @@ function JobTitle({ form }) {
     console.log(data);
     let dataFilter = data.filter(function(d) {
       return (
-        d.description.toLowerCase().includes(e.target.value.toLowerCase())
-        ||
-        d.division.toLowerCase().includes(e.target.value.toLowerCase())
-      )
+        d.description.toLowerCase().includes(e.target.value.toLowerCase()) ||
+        d.division_id.toLowerCase().includes(e.target.value.toLowerCase())
+      );
     });
     setdataSource(dataFilter);
   }
@@ -120,13 +129,13 @@ function JobTitle({ form }) {
       if (!errors) {
         if (modalData === "") {
           // Add New Data
-          axios.post(BACKEND_URL+"addJobTitle", values);
+          axios.post(BACKEND_URL + "addJobTitle", values);
         } else {
           console.log({
             id: modalData["_id"],
             update: values
           });
-          axios.post(BACKEND_URL+"updateJobTitle", {
+          axios.post(BACKEND_URL + "updateJobTitle", {
             id: modalData["_id"],
             update: values
           });
@@ -166,7 +175,7 @@ function JobTitle({ form }) {
       okType: "danger",
       cancelText: "No",
       onOk() {
-        axios.delete(BACKEND_URL+"deleteJobTitle", {
+        axios.delete(BACKEND_URL + "deleteJobTitle", {
           data: {
             id: record["_id"]
           }
@@ -181,62 +190,62 @@ function JobTitle({ form }) {
 
   const { getFieldDecorator, validateFieldsAndScroll } = form;
 
-    return (
-      <React.Fragment>
-        <Modal
-          title={modalTitle}
-          visible={ModalJobTitleVisible}
-          onOk={handleOk}
-          onCancel={handleCancel}
-          destroyOnClose={true}
-        >
-          <Form className="login-form">
-            <Form.Item>
-              {getFieldDecorator("description", {
-                initialValue: modalData ? modalData.description : "",
-                rules: [
-                  { required: true, message: "Please input your description!" }
-                ]
-              })(<Input placeholder="Description" />)}
-            </Form.Item>
-            <Form.Item>
-              {getFieldDecorator("division", {
-                initialValue: modalData ? modalData.division : undefined,
-                rules: [{ required: true, message: "Please select division!" }]
-              })(<Select placeholder="Division">{dataDivision}</Select>)}
-            </Form.Item>
-          </Form>
-        </Modal>
-        <center>
-          <h3>Job Title List</h3>
-        </center>
-        <Row>
-          <Col span={22}>
-            <Input placeholder="Find Job Title" onPressEnter={searchData} />
-          </Col>
-          <Col span={2}>
-            <Button type="primary" icon="search">
-              Search
-            </Button>
-          </Col>
-        </Row>
-        <Button
-          type="primary"
-          icon="plus-square"
-          style={{ marginTop: "1%" }}
-          onClick={onClickAdd}
-        >
-          Add Job Title
-        </Button>
-        <Table
-          dataSource={dataSource}
-          columns={columns}
-          pagination={{ defaultPageSize: 6, showSizeChanger: false }}
-          rowKey="_id"
-          loading={firstLoad}
-        />
-      </React.Fragment>
-    );
+  return (
+    <React.Fragment>
+      <Modal
+        title={modalTitle}
+        visible={ModalJobTitleVisible}
+        onOk={handleOk}
+        onCancel={handleCancel}
+        destroyOnClose={true}
+      >
+        <Form className="login-form">
+          <Form.Item>
+            {getFieldDecorator("description", {
+              initialValue: modalData ? modalData.description : "",
+              rules: [
+                { required: true, message: "Please input your description!" }
+              ]
+            })(<Input placeholder="Description" />)}
+          </Form.Item>
+          <Form.Item>
+            {getFieldDecorator("division_id", {
+              initialValue: modalData ? modalData.division_id : undefined,
+              rules: [{ required: true, message: "Please select division!" }]
+            })(<Select placeholder="Division">{dataDivision}</Select>)}
+          </Form.Item>
+        </Form>
+      </Modal>
+      <center>
+        <h3>Job Title List</h3>
+      </center>
+      <Row>
+        <Col span={22}>
+          <Input placeholder="Find Job Title" onPressEnter={searchData} />
+        </Col>
+        <Col span={2}>
+          <Button type="primary" icon="search">
+            Search
+          </Button>
+        </Col>
+      </Row>
+      <Button
+        type="primary"
+        icon="plus-square"
+        style={{ marginTop: "1%" }}
+        onClick={onClickAdd}
+      >
+        Add Job Title
+      </Button>
+      <Table
+        dataSource={dataSource}
+        columns={columns}
+        pagination={{ defaultPageSize: 6, showSizeChanger: false }}
+        rowKey="_id"
+        loading={firstLoad}
+      />
+    </React.Fragment>
+  );
 }
 
 const JobTitleForm = Form.create({ name: "JobTitle" })(JobTitle);
