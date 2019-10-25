@@ -313,7 +313,7 @@ function RegistrationForm({ form }) {
                 whitespace: true
               }
             ]
-          })(<Select>{dataUser}</Select>)}
+          })(<Select placeholder="Select Requester">{dataUser}</Select>)}
         </Form.Item>
         <Form.Item
           label={

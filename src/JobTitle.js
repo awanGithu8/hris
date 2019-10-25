@@ -201,7 +201,7 @@ function JobTitle({ form }) {
             </Form.Item>
             <Form.Item>
               {getFieldDecorator("division", {
-                initialValue: modalData ? modalData.division : "",
+                initialValue: modalData ? modalData.division : undefined,
                 rules: [{ required: true, message: "Please select division!" }]
               })(<Select placeholder="Division">{dataDivision}</Select>)}
             </Form.Item>

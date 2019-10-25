@@ -195,7 +195,7 @@ function Division({
           </Form.Item>
           <Form.Item>
             {getFieldDecorator('approver', {
-              initialValue: modalData?modalData.approver:"",
+              initialValue: modalData?modalData.approver:undefined,
               rules: [{ required: true, message: 'Please select Approver!' }],
             })(
               <Select placeholder="Select Approver">

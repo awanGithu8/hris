@@ -243,7 +243,7 @@ function User({
           </Form.Item>
           <Form.Item>
             {getFieldDecorator('job_title', {
-               initialValue: modalData?modalData.job_title:"",
+               initialValue: modalData?modalData.job_title:undefined,
               rules: [{ required: true, message: 'Please Select Job Title' }],
             })(
               <Select placeholder="Job Title">
