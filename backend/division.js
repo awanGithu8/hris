@@ -5,7 +5,7 @@ const Schema = mongoose.Schema;
 const DataSchema = new Schema(
   {
     description: {type: String, unique: true, required: true},
-    approver: {type: String, required: true}
+    approver_id: {type: String, required: true}
   },
   { timestamps: true }
 );

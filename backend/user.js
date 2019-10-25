@@ -6,8 +6,8 @@ const DataSchema = new Schema(
   {
     username: {type: String, unique: true, required: true},
     name: {type: String, required: true},
-    division: {type: String, required: true},
-    job_title: {type: String, required: true},
+    division_id: {type: String, required: true},
+    job_title_id: {type: String, required: true},
     remaining: {type: Number, required: true},
     role: {type: String, required: true},
     password: {type: String},
