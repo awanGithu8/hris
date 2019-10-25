@@ -29,6 +29,7 @@ function User({ form }) {
   const [data, setData] = useState([]);
   const [dataJobTitle, setdataJobTitle] = useState([]);
   const [dataJobTitleDivision, setDataJobTitleDivision] = useState([]);
+  const [dataJobTitleDescription, setDataJobTitleDescription] = useState([]);
 
   const [firstLoad, setFirstLoad] = useState(true);
 
@@ -47,13 +48,16 @@ function User({ form }) {
     },
     {
       title: "Division",
-      dataIndex: "division",
-      key: "division"
+      dataIndex: "division_id",
+      key: "division_id"
     },
     {
       title: "Job Title",
-      dataIndex: "job_title",
-      key: "job_title"
+      dataIndex: "job_title_id",
+      key: "job_title_id",
+      render: (text) => {
+        return dataJobTitleDescription[text];
+      },
     },
     {
       title: "Remaining Permit",
@@ -125,10 +129,10 @@ function User({ form }) {
 
   function handleOk() {
     validateFieldsAndScroll((errors, values) => {
-      if (!errors) {
+      if (!errors) {        
         if (modalData === "") {
           // Add New Data
-          values.division = dataJobTitleDivision[values.job_title];
+          values.division_id = dataJobTitleDivision[values.job_title_id];
           console.log(values);
           axios.post(BACKEND_URL + "putData", values);
         } else {
@@ -189,17 +193,21 @@ function User({ form }) {
     axios.get(BACKEND_URL + "listJobTitle").then(res => {
       let job_title = [];
       let job_title_division = [];
+      let job_title_description = [];
+
       for (const [index, value] of res.data.data.entries()) {
         job_title.push(
-          <Option key={index} value={value.description}>
+          <Option key={index} value={value["_id"]}>
             {value.description}
           </Option>
         );
-        job_title_division[value.description] = value.division;
+        job_title_division[value["_id"]] = value.division_id;
+        job_title_description[value["_id"]] = value.description;
       }
 
       setdataJobTitle(job_title);
       setDataJobTitleDivision(job_title_division);
+      setDataJobTitleDescription(job_title_description);
     });
   }
 
@@ -261,8 +269,8 @@ function User({ form }) {
             )}
           </Form.Item>
           <Form.Item>
-            {getFieldDecorator("job_title", {
-              initialValue: modalData ? modalData.job_title : undefined,
+            {getFieldDecorator("job_title_id", {
+              initialValue: modalData ? modalData.job_title_id : undefined,
               rules: [{ required: true, message: "Please Select Job Title" }]
             })(<Select placeholder="Job Title">{dataJobTitle}</Select>)}
           </Form.Item>
