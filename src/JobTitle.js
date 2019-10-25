@@ -118,7 +118,7 @@ function JobTitle({ form }) {
     let dataFilter = data.filter(function(d) {
       return (
         d.description.toLowerCase().includes(e.target.value.toLowerCase()) ||
-        d.division_id.toLowerCase().includes(e.target.value.toLowerCase())
+        arrDivision[d.division_id].toLowerCase().includes(e.target.value.toLowerCase())
       );
     });
     setdataSource(dataFilter);
