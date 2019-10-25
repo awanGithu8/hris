@@ -30,8 +30,8 @@ function Division({
     },
     {
       title: 'Approver',
-      dataIndex: 'approver',
-      key: 'approver',
+      dataIndex: 'approver_id',
+      key: 'approver_id',
       sorter: (a, b) => a.approver?a.approver.length:0 - b.approver?b.approver.length:0,
     },
     {
@@ -67,7 +67,7 @@ function Division({
       let approver = [];
       // let approver_division = [];
       for (const [index, value] of res.data.data.entries()) {
-        approver.push(<Option key={index} value={value.username}>{value.username}</Option>)
+        approver.push(<Option key={index} value={value["_id"]}>{value.username}</Option>)
         // approver_division[value.description] = value.division;
       }
   
@@ -194,8 +194,8 @@ function Division({
             )}
           </Form.Item>
           <Form.Item>
-            {getFieldDecorator('approver', {
-              initialValue: modalData?modalData.approver:undefined,
+            {getFieldDecorator('approver_id', {
+              initialValue: modalData?modalData.approver_id:undefined,
               // rules: [{ required: true, message: 'Please select Approver!' }],
             })(
               <Select placeholder="Select Approver">
