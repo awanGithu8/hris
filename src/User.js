@@ -262,9 +262,9 @@ function User({ form }) {
           {!modalData.username && (
             <Form.Item>
               {getFieldDecorator("password", {
-                rules: [
-                  { required: true, message: "Please input your Password!" }
-                ]
+                // rules: [
+                //   { required: true, message: "Please input your Password!" }
+                // ]
               })(
                 <Input
                   prefix={
