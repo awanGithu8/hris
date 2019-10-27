@@ -91,6 +91,12 @@ function User({ form }) {
             </Button>
           </Tooltip>
           <Divider type="vertical" />
+          <Tooltip title="Change Password">
+            <Button type="primary" onClick={() => onClickEdit(record, "change_password")}>
+              <Icon type="unlock" />
+            </Button>
+          </Tooltip>
+          <Divider type="vertical" />
           <Tooltip title="Delete User">
             <Button type="danger" onClick={() => onClickDelete(record)}>
               <Icon type="delete" />
@@ -109,7 +115,7 @@ function User({ form }) {
 
   function refreshData() {
     setFirstLoad(true);
-    setTimeout(function() {
+    setTimeout(function () {
       axios.get(BACKEND_URL + "getData").then(res => {
         console.log(res);
         setDataNeed(res.data.data);
@@ -127,7 +133,7 @@ function User({ form }) {
   function searchData(e) {
     console.log(e.target.value);
     console.log(data);
-    let dataFilter = data.filter(function(d) {
+    let dataFilter = data.filter(function (d) {
       return (
         d.username.toLowerCase().includes(e.target.value.toLowerCase()) ||
         d.role.toLowerCase().includes(e.target.value.toLowerCase())
@@ -169,9 +175,11 @@ function User({ form }) {
     setModalUserVisible(true);
   }
 
-  function onClickEdit(record) {
-    setModalTitle("Edit User");
+  function onClickEdit(record, edit_type = "edit_user") {
+    let modal_title = edit_type === "change_password" ? "Change Password" : "Edit User";
+    setModalTitle(modal_title);
 
+    record.edit_type = edit_type;
     setModalData(record);
 
     setModalUserVisible(true);
@@ -244,22 +252,26 @@ function User({ form }) {
         destroyOnClose={true}
       >
         <Form className="login-form">
-          <Form.Item>
-            {getFieldDecorator("username", {
-              initialValue: modalData ? modalData.username : "",
-              rules: [
-                { required: true, message: "Please input your username!" }
-              ]
-            })(
-              <Input
-                prefix={
-                  <Icon type="user" style={{ color: "rgba(0,0,0,.25)" }} />
-                }
-                placeholder="Username"
-              />
-            )}
-          </Form.Item>
-          {!modalData.username && (
+          {
+            modalData.edit_type !== "change_password" &&
+            <Form.Item>
+              {getFieldDecorator("username", {
+                initialValue: modalData ? modalData.username : "",
+                rules: [
+                  { required: true, message: "Please input your username!" }
+                ]
+              })(
+                <Input
+                  prefix={
+                    <Icon type="user" style={{ color: "rgba(0,0,0,.25)" }} />
+                  }
+                  placeholder="Username"
+                />
+              )}
+            </Form.Item>
+          }
+
+          {!modalData.username || modalData.edit_type === "change_password" && (
             <Form.Item>
               {getFieldDecorator("password", {
                 // rules: [
@@ -276,50 +288,58 @@ function User({ form }) {
               )}
             </Form.Item>
           )}
-          <Form.Item>
-            {getFieldDecorator("name", {
-              initialValue: modalData ? modalData.name : "",
-              rules: [{ required: true, message: "Please input your name!" }]
-            })(
-              <Input
-                prefix={
-                  <Icon type="user" style={{ color: "rgba(0,0,0,.25)" }} />
-                }
-                placeholder="Name"
-              />
-            )}
-          </Form.Item>
-          <Form.Item>
-            {getFieldDecorator("job_title_id", {
-              initialValue: modalData ? modalData.job_title_id : undefined,
-              rules: [{ required: true, message: "Please Select Job Title" }]
-            })(<Select placeholder="Job Title">{dataJobTitle}</Select>)}
-          </Form.Item>
-          <Form.Item>
-            {getFieldDecorator("role", {
-              initialValue: modalData ? modalData.role : undefined,
-              rules: [{ required: true, message: "Please Select Role" }]
-            })(
-              <Select placeholder="Role">
-                <Option value="Administrator">Administrator</Option>
-                <Option value="Approver">Approver</Option>
-                <Option value="User">User</Option>
-              </Select>
-            )}
-          </Form.Item>
-          <Form.Item>
-            {getFieldDecorator("remaining", {
-              initialValue: modalData ? modalData.remaining : "",
-              rules: [
-                { required: true, message: "Please input Permit Remaining!" }
-              ]
-            })(
-              <InputNumber
-                style={{ width: "100%" }}
-                placeholder="Permit Remaining"
-              />
-            )}
-          </Form.Item>
+
+
+          {
+            modalData.edit_type !== "change_password" &&
+            <React.Fragment>
+
+              <Form.Item>
+                {getFieldDecorator("name", {
+                  initialValue: modalData ? modalData.name : "",
+                  rules: [{ required: true, message: "Please input your name!" }]
+                })(
+                  <Input
+                    prefix={
+                      <Icon type="user" style={{ color: "rgba(0,0,0,.25)" }} />
+                    }
+                    placeholder="Name"
+                  />
+                )}
+              </Form.Item>
+              <Form.Item>
+                {getFieldDecorator("job_title_id", {
+                  initialValue: modalData ? modalData.job_title_id : undefined,
+                  rules: [{ required: true, message: "Please Select Job Title" }]
+                })(<Select placeholder="Job Title">{dataJobTitle}</Select>)}
+              </Form.Item>
+              <Form.Item>
+                {getFieldDecorator("role", {
+                  initialValue: modalData ? modalData.role : undefined,
+                  rules: [{ required: true, message: "Please Select Role" }]
+                })(
+                  <Select placeholder="Role">
+                    <Option value="Administrator">Administrator</Option>
+                    <Option value="Approver">Approver</Option>
+                    <Option value="User">User</Option>
+                  </Select>
+                )}
+              </Form.Item>
+              <Form.Item>
+                {getFieldDecorator("remaining", {
+                  initialValue: modalData ? modalData.remaining : "",
+                  rules: [
+                    { required: true, message: "Please input Permit Remaining!" }
+                  ]
+                })(
+                  <InputNumber
+                    style={{ width: "100%" }}
+                    placeholder="Permit Remaining"
+                  />
+                )}
+              </Form.Item>
+            </React.Fragment>
+          }
         </Form>
       </Modal>
       <center>
