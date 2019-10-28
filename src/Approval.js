@@ -27,12 +27,18 @@ function Approval() {
   const [firstLoad, setFirstLoad] = useState(true)
   const [data, setData] = useState([]);
 
+
+  const [dataUser, setdataUser] = useState([]);
+
   const columns = [
     {
       title: 'Name',
       dataIndex: 'user_id',
       key: 'user_id',
       sorter: (a, b) => a.user_id.length - b.user_id.length,
+      render: text => {
+        return dataUser[text].name;
+      }          
     },
     {
       title: 'Type',
@@ -142,8 +148,21 @@ function Approval() {
 
   
   useEffect(() => {
+    getUsers();
     refreshData();
   }, [])
+  
+  function getUsers() {
+    axios.get(BACKEND_URL + "getData").then(res => {
+      let users = [];
+      for (const [index, value] of res.data.data.entries()) {
+        value.password = "***SANTUY WAS HERE***";
+        users[value["_id"]] = value;
+      }
+      setdataUser(users);
+    });
+  }
+
 
   function refreshData(){
     setFirstLoad(true);

@@ -4,13 +4,14 @@ import { Table, Input, Form } from 'antd';
 
 import axios from 'axios';
 
-import {BACKEND_URL} from "./config/connection";
+import { BACKEND_URL } from "./config/connection";
 
 
 function Cuti() {
   const [dataSource, setdataSource] = useState([]);
   const [firstLoad, setFirstLoad] = useState(true)
   const [data, setData] = useState([]);
+  const [dataUser, setdataUser] = useState([]);
 
   const columns = [
     {
@@ -18,6 +19,9 @@ function Cuti() {
       dataIndex: 'user_id',
       key: 'user_id',
       sorter: (a, b) => a.user_id.length - b.user_id.length,
+      render: text => {
+        return dataUser[text].name;
+      }      
     },
     {
       title: 'Type',
@@ -58,27 +62,40 @@ function Cuti() {
     },
   ];
 
-  
+
   useEffect(() => {
+    getUsers();
     refreshData();
   }, [])
 
-  function refreshData(){
+  function getUsers() {
+    axios.get(BACKEND_URL + "getData").then(res => {
+      let users = [];
+      for (const [index, value] of res.data.data.entries()) {
+        value.password = "***SANTUY WAS HERE***";
+        users[value["_id"]] = value;
+      }
+      setdataUser(users);
+    });
+
+  }
+
+  function refreshData() {
     setFirstLoad(true);
     setTimeout(
-        function() {
-          axios.get(BACKEND_URL+'listCuti')
-            .then((res) => {
-              setDataNeed(res.data.data)
-            }
+      function () {
+        axios.get(BACKEND_URL + 'listCuti')
+          .then((res) => {
+            setDataNeed(res.data.data)
+          }
           )
-        }
+      }
         .bind(this),
-        1000
+      1000
     );
   }
-  
-  function setDataNeed(skiw){
+
+  function setDataNeed(skiw) {
     setdataSource(skiw);
     setData(skiw);
     setFirstLoad(false);
@@ -95,22 +112,22 @@ function Cuti() {
     setdataSource(dataFilter);
   }
 
-   return(
-      <React.Fragment>        
-        <center><h3>Permit List</h3></center>
-        <Input
-          placeholder="Find Permit"
-          onPressEnter={searchData}
-        />    
-        <Table
-          dataSource={dataSource}
-          columns={columns}
-          pagination={{ defaultPageSize: 8, showSizeChanger: false }}
-          rowKey="_id" 
-          loading={firstLoad}
-        />
-      </React.Fragment>
-    );
+  return (
+    <React.Fragment>
+      <center><h3>Permit List</h3></center>
+      <Input
+        placeholder="Find Permit"
+        onPressEnter={searchData}
+      />
+      <Table
+        dataSource={dataSource}
+        columns={columns}
+        pagination={{ defaultPageSize: 8, showSizeChanger: false }}
+        rowKey="_id"
+        loading={firstLoad}
+      />
+    </React.Fragment>
+  );
 }
 
 const CutiForm = Form.create({ name: 'Cuti' })(Cuti);
