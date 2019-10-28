@@ -50,6 +50,8 @@ function RegistrationForm({ form }) {
   };
 
   useEffect(() => {
+    refreshData();
+
     let divisions = getDivision();
     let job_title = getJobTitle();
 
@@ -61,10 +63,12 @@ function RegistrationForm({ form }) {
           session_user.role == "Administrator" ||
           session_user.username === username
         ) {
-          let division_jobtitle_info = job_title[job_title_id]?`[${job_title[job_title_id]} @ ${divisions[division_id]}]`:"";
+          let division_jobtitle_info = job_title[job_title_id]
+            ? `[${job_title[job_title_id]} @ ${divisions[division_id]}]`
+            : "";
           let display_name = `${username} - ${name} ${division_jobtitle_info}`;
           users.push(
-            <Option key={index} value={username}>
+            <Option key={index} value={value["_id"]}>
               {display_name}
             </Option>
           );
@@ -293,7 +297,7 @@ function RegistrationForm({ form }) {
       function() {
         axios
           .post(BACKEND_URL + "listCutiUser", {
-            username: session_user.username
+            user_id: session_user["_id"]
           })
           .then(res => {
             console.log(res);
@@ -303,10 +307,6 @@ function RegistrationForm({ form }) {
       1000
     );
   }
-
-  useEffect(() => {
-    refreshData();
-  }, []);
 
   return (
     <React.Fragment>
@@ -325,7 +325,7 @@ function RegistrationForm({ form }) {
             </span>
           }
         >
-          {getFieldDecorator("name", {
+          {getFieldDecorator("user_id", {
             rules: [
               {
                 required: true,

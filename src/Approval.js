@@ -30,9 +30,9 @@ function Approval() {
   const columns = [
     {
       title: 'Name',
-      dataIndex: 'name',
-      key: 'name',
-      sorter: (a, b) => a.name.length - b.name.length,
+      dataIndex: 'user_id',
+      key: 'user_id',
+      sorter: (a, b) => a.user_id.length - b.user_id.length,
     },
     {
       title: 'Type',
