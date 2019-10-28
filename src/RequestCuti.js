@@ -26,7 +26,7 @@ const { TextArea } = Input;
 const { RangePicker } = DatePicker;
 
 function RegistrationForm({ form }) {
-  let session_user = JSON.parse(window.localStorage.getItem('datauser'));
+  let session_user = JSON.parse(window.localStorage.getItem("datauser"));
 
   const { getFieldDecorator, validateFieldsAndScroll, resetFields } = form;
 
@@ -50,22 +50,22 @@ function RegistrationForm({ form }) {
   };
 
   useEffect(() => {
+    let divisions = getDivision();
+    let job_title = getJobTitle();
+
     axios.get(BACKEND_URL + "getData").then(res => {
       let users = [];
       for (const [index, value] of res.data.data.entries()) {
-        const { username, name, job_title, division } = value;
-        console.log(session_user);
-        if(session_user.role == "Administrator" || session_user.username === username){
+        const { username, name, job_title_id, division_id } = value;
+        if (
+          session_user.role == "Administrator" ||
+          session_user.username === username
+        ) {
+          let division_jobtitle_info = job_title[job_title_id]?`[${job_title[job_title_id]} @ ${divisions[division_id]}]`:"";
+          let display_name = `${username} - ${name} ${division_jobtitle_info}`;
           users.push(
             <Option key={index} value={username}>
-              {username +
-                " - " +
-                name +
-                " [ " +
-                job_title +
-                " @" +
-                division +
-                " ]"}
+              {display_name}
             </Option>
           );
         }
@@ -73,6 +73,26 @@ function RegistrationForm({ form }) {
       setdataUser(users);
     });
   }, []);
+
+  function getDivision() {
+    let arr_division = [];
+    axios.get(BACKEND_URL + "listDivision").then(res => {
+      for (const [index, value] of res.data.data.entries()) {
+        arr_division[value["_id"]] = value.description;
+      }
+    });
+    return arr_division;
+  }
+
+  function getJobTitle() {
+    let job_title = [];
+    axios.get(BACKEND_URL + "listJobTitle").then(res => {
+      for (const [index, value] of res.data.data.entries()) {
+        job_title[value["_id"]] = value.description;
+      }
+    });
+    return job_title;
+  }
 
   function handleChange(value) {
     console.log(`selected ${value}`);
