@@ -216,9 +216,9 @@ router.get("/listCuti", (req, res) => {
 });
 
 router.post("/listCutiUser", (req, res) => {
-  const { username } = req.body;
+  const { user_id } = req.body;
 
-  Cuti.find({ name: username }, function(err, data) {
+  Cuti.find({ user_id: user_id }, function(err, data) {
     if (err) return res.json({ success: false, error: err });
     return res.json({ success: true, data: data });
   }).sort({
@@ -227,16 +227,9 @@ router.post("/listCutiUser", (req, res) => {
 });
 
 router.post("/listApproval", (req, res) => {
-  const { division } = req.body;
+  const { id_approver } = req.body;
 
-  // Kudunya hanya tampilkan daftar approve dari approver perdivisi, azab ga pake relasi wkwkwk
-  // User.find({ division: division }, function (err, datauser) {
-  //   var list_users = datauser.map(a => a.username);
-
-  //   console.log(list_users);
-  // });
-
-  Cuti.find({ status: "Waiting For Approval" }, function(err, data) {
+  Cuti.find({ approver_id: id_approver, status: "Waiting For Approval" }, function(err, data) {
     if (err) return res.json({ success: false, error: err });
     return res.json({ success: true, data: data });
   }).sort({

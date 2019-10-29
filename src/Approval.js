@@ -169,7 +169,7 @@ function Approval() {
     setTimeout(
         function() {
           axios.post(BACKEND_URL+'listApproval', {
-            division: session_user.division
+            id_approver: session_user["_id"]
           })
             .then((res) => {
               setDataNeed(res.data.data)

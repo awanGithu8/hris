@@ -11,7 +11,8 @@ const DataSchema = new Schema(
     total_days: {type: Number, required: true},
     work_date: {type: String, required: true},
     reason: {type: String, required: true},
-    status: {type: String, default: 'Waiting For Approval'}
+    status: {type: String, default: 'Waiting For Approval'},
+    approver_id: {type: String, required: true}
   },
   { timestamps: true }
 );

@@ -31,6 +31,9 @@ function RegistrationForm({ form }) {
   const { getFieldDecorator, validateFieldsAndScroll, resetFields } = form;
 
   const [dataUser, setdataUser] = useState([]);
+  const [dataUserArray, setdataUserArray] = useState([]);
+  const [division, setDivision] = useState([]);
+  const [jobTitle, setJobTitle] = useState([]);
 
   const [permitTotal, setPermitTotal] = useState(1);
   let working_date = addWorkDays(moment().toDate(), permitTotal); // Tue Nov 29 2016 00:00:00 GMT+0000 (GMT Standard Time)
@@ -53,28 +56,33 @@ function RegistrationForm({ form }) {
     refreshData();
 
     let divisions = getDivision();
-    let job_title = getJobTitle();
+    let job_titles = getJobTitle();
+
+    console.log(jobTitle);
 
     axios.get(BACKEND_URL + "getData").then(res => {
       let users = [];
+      let user_array = [];
       for (const [index, value] of res.data.data.entries()) {
         const { username, name, job_title_id, division_id } = value;
         if (
           session_user.role == "Administrator" ||
           session_user.username === username
         ) {
-          let division_jobtitle_info = job_title[job_title_id]
-            ? `[${job_title[job_title_id]} @ ${divisions[division_id]}]`
+          let division_jobtitle_info = job_titles[job_title_id]
+            && divisions[division_id] ? `[${job_titles[job_title_id].description} @ ${divisions[division_id].description}]`
             : "";
           let display_name = `${username} - ${name} ${division_jobtitle_info}`;
           users.push(
-            <Option key={index} value={value["_id"]}>
+            <Option key={index} value={`${value["_id"]}___${value["division_id"]}`}>
               {display_name}
             </Option>
           );
+          user_array[value["_id"]] = value;
         }
       }
       setdataUser(users);
+      setdataUserArray(user_array);
     });
   }, []);
 
@@ -82,9 +90,10 @@ function RegistrationForm({ form }) {
     let arr_division = [];
     axios.get(BACKEND_URL + "listDivision").then(res => {
       for (const [index, value] of res.data.data.entries()) {
-        arr_division[value["_id"]] = value.description;
+        arr_division[value["_id"]] = value;
       }
     });
+    setDivision(arr_division);
     return arr_division;
   }
 
@@ -92,9 +101,10 @@ function RegistrationForm({ form }) {
     let job_title = [];
     axios.get(BACKEND_URL + "listJobTitle").then(res => {
       for (const [index, value] of res.data.data.entries()) {
-        job_title[value["_id"]] = value.description;
+        job_title[value["_id"]] = value;
       }
     });
+    setJobTitle(job_title);
     return job_title;
   }
 
@@ -164,11 +174,17 @@ function RegistrationForm({ form }) {
         values.from_date = values.date[0].format("DD-MM-YYYY");
         values.to_date = values.date[1].format("DD-MM-YYYY");
 
+        let id_divisi = values.user_id.split("___")[1];
+        values.user_id = values.user_id.split("___")[0];
+
+        values.approver_id = division[id_divisi].approver_id;
+
         delete values["date"];
 
         values.total_days = permitTotal;
         values.work_date = workingDate;
 
+        console.log(dataUserArray);
         console.log("Received values of form: ", values);
         try {
           axios.post(BACKEND_URL + "addCuti", values);
@@ -177,7 +193,7 @@ function RegistrationForm({ form }) {
 
           /* Send Email start */
           const templateParams = {
-            name: values.name,
+            name: dataUserArray[values.user_id].name,
             type: values.type,
             reason: values.reason,
             from_date: values.from_date,
@@ -196,13 +212,14 @@ function RegistrationForm({ form }) {
             .then(
               response => {
                 console.log("SUCCESS!", response.status, response.text);
-                refreshData();
               },
               err => {
                 console.log("FAILED...", err);
               }
             );
           /* Send Email End */
+          refreshData();
+
         } catch (e) {
           console.log("Something went wrong " + e);
         }
@@ -292,6 +309,7 @@ function RegistrationForm({ form }) {
   }
 
   function refreshData() {
+    console.log(session_user["_id"]);
     setFirstLoad(true);
     setTimeout(
       function() {
