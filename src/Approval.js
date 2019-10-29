@@ -125,11 +125,11 @@ function Approval() {
   }
 
   function onClickReject(data){
-    const {name, type, from_date, to_date} = data;
+    const {user_id, type, from_date, to_date} = data;
 
     confirm({
       title: `Are you sure reject this ${type}?`,
-      content: `Name: ${name} [${from_date} s/d ${to_date}]`,
+      content: `Name: ${user_id} [${from_date} s/d ${to_date}]`,
       okText: 'Yes',
       okType: 'danger',
       cancelText: 'No',
