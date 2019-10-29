@@ -101,18 +101,18 @@ function Approval() {
   ];
 
   function onClickApprove(data){
-    const {name, type, from_date, to_date, total_days} = data;
+    const {user_id, type, from_date, to_date, total_days} = data;
     console.log(data);
-    console.log(name, total_days);
+    console.log(total_days);
     confirm({
       title: `Are you sure approve this ${type}?`,
-      content: `Name: ${name} [${from_date} s/d ${to_date}]`,
+      content: `Name: ${user_id} [${from_date} s/d ${to_date}]`,
       okText: 'Yes',
       cancelText: 'No',
       onOk() {
         axios.post(BACKEND_URL+'approveCuti', {
           id: data["_id"],
-          requester: name,
+          requester: user_id,
           total_days: total_days
         });
         openNotificationWithIcon('success', 'approve');

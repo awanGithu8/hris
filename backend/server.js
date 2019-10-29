@@ -262,9 +262,8 @@ router.post("/addCuti", (req, res) => {
 router.post("/approveCuti", (req, res) => {
   const { id, total_days, requester } = req.body;
 
-  User.find({ username: requester }, function(err, datauser) {
+  User.find({ _id: requester }, function(err, datauser) {
     let { remaining } = datauser[0];
-    let id_user = datauser[0].id;
 
     if (!err) {
       Cuti.findByIdAndUpdate(id, { status: "Approved" }, err => {
@@ -272,12 +271,12 @@ router.post("/approveCuti", (req, res) => {
           return res.json({ success: false, error: err });
         } else {
           // Kurangi saldo cuti user
-          console.log(remaining);
-          console.log(total_days);
-          console.log(id_user);
-          console.log("gajelassss ====== " + datauser.remaining - total_days);
+          // console.log(remaining);
+          // console.log(total_days);
+          // console.log(id_user);
+          // console.log("gajelassss ====== " + datauser.remaining - total_days);
           User.findByIdAndUpdate(
-            id_user,
+            requester,
             { remaining: remaining - total_days },
             err => {}
           );
