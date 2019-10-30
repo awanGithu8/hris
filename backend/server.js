@@ -237,6 +237,15 @@ router.post("/listApproval", (req, res) => {
   });
 });
 
+router.post("/listApprovalAll", (req, res) => {
+  Cuti.find({ status: "Waiting For Approval" }, function(err, data) {
+    if (err) return res.json({ success: false, error: err });
+    return res.json({ success: true, data: data });
+  }).sort({
+    createdAt: -1
+  });
+});
+
 router.post("/addCuti", (req, res) => {
   let data = new Cuti();
 

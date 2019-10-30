@@ -165,10 +165,11 @@ function Approval() {
 
 
   function refreshData(){
+    let urlListApproval = session_user.role === "Administrator"?"listApprovalAll":"listApproval";
     setFirstLoad(true);
     setTimeout(
         function() {
-          axios.post(BACKEND_URL+'listApproval', {
+          axios.post(BACKEND_URL+''+urlListApproval, {
             id_approver: session_user["_id"]
           })
             .then((res) => {
@@ -208,7 +209,7 @@ function Approval() {
         <Table
           dataSource={dataSource}
           columns={columns}
-          pagination={{ defaultPageSize: 5, showSizeChanger: false }}
+          pagination={{ defaultPageSize: 7, showSizeChanger: false }}
           rowKey="_id" 
           loading={firstLoad}
         />
