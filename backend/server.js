@@ -11,7 +11,7 @@ const JobTitle = require("./job_title");
 const Cuti = require("./cuti");
 /* End Import Schema */
 
-const API_PORT = 3001;
+const API_PORT = 5000;
 const app = express();
 app.use(cors());
 const router = express.Router();
@@ -355,4 +355,4 @@ router.get("/deleteAllData", (req, res) => {
 app.use("/api", router);
 
 // launch our backend into a port
-app.listen(API_PORT, () => console.log(`LISTENING ON PORT ${API_PORT}`));
+app.listen(process.env.PORT || API_PORT, () => console.log(`LISTENING ON PORT ${API_PORT}`));
