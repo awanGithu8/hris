@@ -79,22 +79,23 @@ function Layout(props) {
               >
                 <Menu.Item key="division">
                   <NavLink to="/division">
-                    <Icon type="apartment" /> Division
+                    <Icon type="gold" theme="twoTone" />
+                    Division
                   </NavLink>
                 </Menu.Item>
                 <Menu.Item key="job_title">
                   <NavLink to="/job_title">
-                    <Icon type="file-done" /> Job Title
+                    <Icon type="shopping" theme="twoTone" /> Job Title
                   </NavLink>
                 </Menu.Item>
                 <Menu.Item key="user">
                   <NavLink to="/user">
-                    <Icon type="usergroup-add" /> User
+                    <Icon type="smile" theme="twoTone" /> User
                   </NavLink>
                 </Menu.Item>
-                <Menu.Item key="user">
-                  <NavLink to="/user">
-                    <Icon type="usergroup-add" /> Special Cuti
+                <Menu.Item key="special_leave">
+                  <NavLink to="/special_leave">
+                    <Icon type="schedule" theme="twoTone" /> Special Leave
                   </NavLink>
                 </Menu.Item>
               </SubMenu>
@@ -112,17 +113,17 @@ function Layout(props) {
               >
                 <Menu.Item key="daftar_cuti">
                   <NavLink to="/cuti">
-                    <Icon type="menu" /> Permit List
+                    <Icon type="container" theme="twoTone" /> Permit List
                   </NavLink>
                 </Menu.Item>
                 <Menu.Item key="pengajuan_cuti">
                   <NavLink to="/add_cuti">
-                    <Icon type="form" /> Permit Request
+                    <Icon type="file-add" theme="twoTone" /> Permit Request
                   </NavLink>
                 </Menu.Item>
                 <Menu.Item key="approval">
                   <NavLink to="/approval">
-                    <Icon type="check" /> Permit Approval
+                    <Icon type="check-square" theme="twoTone" /> Permit Approval
                   </NavLink>
                 </Menu.Item>
               </SubMenu>
@@ -158,7 +159,7 @@ function Layout(props) {
               >
                 <Menu.Item key="report_permit">
                   <NavLink to="/">
-                    <Icon type="pie-chart" /> Permit Report
+                    <Icon type="pie-chart" theme="twoTone" /> Permit Report
                   </NavLink>
                 </Menu.Item>
               </SubMenu>
