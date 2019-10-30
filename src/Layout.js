@@ -61,7 +61,7 @@ function Layout(props) {
             {session_user.name}
           </div>
           <Menu
-            style={{ height: "79vh", width: "16.5vw" }}
+            style={{ height: "79vh", width: "16.5vw", overflowY: "auto" }}
             defaultSelectedKeys={["1"]}
             defaultOpenKeys={["sub1", "sub2", "sub3"]}
             mode="inline"
@@ -90,6 +90,11 @@ function Layout(props) {
                 <Menu.Item key="user">
                   <NavLink to="/user">
                     <Icon type="usergroup-add" /> User
+                  </NavLink>
+                </Menu.Item>
+                <Menu.Item key="user">
+                  <NavLink to="/user">
+                    <Icon type="usergroup-add" /> Special Cuti
                   </NavLink>
                 </Menu.Item>
               </SubMenu>

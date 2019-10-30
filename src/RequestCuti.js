@@ -34,8 +34,9 @@ function RegistrationForm({ form }) {
   const [dataUserArray, setdataUserArray] = useState([]);
   const [division, setDivision] = useState([]);
   const [jobTitle, setJobTitle] = useState([]);
-
   const [permitTotal, setPermitTotal] = useState(1);
+  const [type, setType] = useState("Annual Leave");
+
   let working_date = addWorkDays(moment().toDate(), permitTotal); // Tue Nov 29 2016 00:00:00 GMT+0000 (GMT Standard Time)
   let currentMonth = ("0" + working_date.getMonth()).slice(-2);
   let currentDate = ("0" + working_date.getDate()).slice(-2);
@@ -69,12 +70,16 @@ function RegistrationForm({ form }) {
           session_user.role == "Administrator" ||
           session_user.username === username
         ) {
-          let division_jobtitle_info = job_titles[job_title_id]
-            && divisions[division_id] ? `[${job_titles[job_title_id].description} @ ${divisions[division_id].description}]`
-            : "";
+          let division_jobtitle_info =
+            job_titles[job_title_id] && divisions[division_id]
+              ? `[${job_titles[job_title_id].description} @ ${divisions[division_id].description}]`
+              : "";
           let display_name = `${username} - ${name} ${division_jobtitle_info}`;
           users.push(
-            <Option key={index} value={`${value["_id"]}___${value["division_id"]}`}>
+            <Option
+              key={index}
+              value={`${value["_id"]}___${value["division_id"]}`}
+            >
               {display_name}
             </Option>
           );
@@ -108,7 +113,8 @@ function RegistrationForm({ form }) {
     return job_title;
   }
 
-  function handleChange(value) {
+  function onChangeType(value) {
+    setType(value);
     console.log(`selected ${value}`);
   }
 
@@ -219,7 +225,6 @@ function RegistrationForm({ form }) {
             );
           /* Send Email End */
           refreshData();
-
         } catch (e) {
           console.log("Something went wrong " + e);
         }
@@ -365,7 +370,7 @@ function RegistrationForm({ form }) {
           className={mb5}
         >
           {getFieldDecorator("type", {
-            initialValue: "Annual Leave",
+            initialValue: type,
             rules: [
               {
                 required: true,
@@ -374,13 +379,33 @@ function RegistrationForm({ form }) {
               }
             ]
           })(
-            <Select onChange={handleChange}>
+            <Select onChange={onChangeType}>
               <Option value="Annual Leave">Annual Leave</Option>
               <Option value="Sick Leave">Sick Leave</Option>
               <Option value="Special Leave">Special Leave</Option>
             </Select>
           )}
         </Form.Item>
+        {type === "Special Leave" && (
+          <Form.Item label={<span>Special Leave&nbsp;</span>} className={mb5}>
+            {getFieldDecorator("special_leave", {
+              initialValue: "",
+              rules: [
+                {
+                  required: true,
+                  message: "Please select special leave!",
+                  whitespace: true
+                }
+              ]
+            })(
+              <Select>
+                <Option value="Pernikahan">Pernikahan</Option>
+                <Option value="Kematian Kucing">Kematian Kucing</Option>
+                <Option value="Pernikahan Kucing">Pernikahan Kucing</Option>
+              </Select>
+            )}
+          </Form.Item>
+        )}
         <Row>
           <Col span={2}></Col>
           <Col span={12} style={{ marginRight: "-10%" }}>
@@ -451,7 +476,7 @@ function RegistrationForm({ form }) {
         pagination={false}
         rowKey="_id"
         loading={firstLoad}
-        scroll={{ y: 240 }}
+        scroll={{ y: 200 }}
       />
     </React.Fragment>
   );
