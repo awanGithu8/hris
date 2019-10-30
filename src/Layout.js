@@ -44,14 +44,24 @@ function Layout(props) {
               className="App-logo"
               alt="logo"
               style={{
-                height: "25vh",
+                height: "18vh",
                 width: "16.5vw",
                 border: "15px solid #001529"
               }}
             />
           </NavLink>
+          <div
+            style={{
+              textAlign: "center",
+              width: "16.5vw",
+              borderRight: "1px solid #001529",
+              backgroundColor: "lightblue"
+            }}
+          >
+            {session_user.name}
+          </div>
           <Menu
-            style={{ height: "75vh", width: "16.5vw" }}
+            style={{ height: "79vh", width: "16.5vw" }}
             defaultSelectedKeys={["1"]}
             defaultOpenKeys={["sub1", "sub2", "sub3"]}
             mode="inline"
