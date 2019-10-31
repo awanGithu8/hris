@@ -1,6 +1,7 @@
 import React from "react";
 import Search from "./Search";
 import Table from "./Table";
+import ButtonAdd from "./ButtonAdd";
 
 export default function Crud(props) {
   return (
@@ -10,6 +11,7 @@ export default function Crud(props) {
       </center>
 
       <Search {...props.search} />
+      <ButtonAdd {...props.buttonAdd} />
       <Table {...props.table} />
     </React.Fragment>
   );

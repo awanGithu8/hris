@@ -5,6 +5,9 @@ export default function SpecialPermit() {
   let searchParams = {
     placeholder: "Find Special Login"
   };
+  let buttonAddParams = {
+    title: "Add Special Permit"
+  }
   let tableParams = {
       btn_add_title: "Add Special Permit"
   };
@@ -24,6 +27,7 @@ export default function SpecialPermit() {
       title={"Special Permit List"}
       search={searchParams}
       table={tableParams}
+      buttonAdd={buttonAddParams}
       onPressEnter={searchData}
     />
   );
