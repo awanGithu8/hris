@@ -1,9 +1,8 @@
 import React from "react";
-import { Modal, Input, Form } from "antd";
+import { Modal, Form } from "antd";
 
-export default function ModalFormComponent(props) {
-  const { getFieldDecorator } = props.form;
-
+export default function ModalFormComponent(props, {children}) {
+    console.log(children)
   return (
     <Modal
       title={props.title}
@@ -13,14 +12,7 @@ export default function ModalFormComponent(props) {
       destroyOnClose={true}
     >
       <Form className="login-form">
-        <Form.Item>
-          {getFieldDecorator("description", {
-            initialValue: props.modalData ? props.modalData.description : "",
-            rules: [
-              { required: true, message: "Please input your description!" }
-            ]
-          })(<Input placeholder="Description" />)}
-        </Form.Item>
+        {children}
       </Form>
     </Modal>
   );

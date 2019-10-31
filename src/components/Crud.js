@@ -4,7 +4,8 @@ import Table from "./Table";
 import ButtonAdd from "./ButtonAdd";
 import ModalForm from "./ModalForm";
 
-export default function Crud(props) {
+export default function Crud(props, {children}) {
+    console.log(children);
   return (
     <React.Fragment>
       <center>
@@ -13,7 +14,7 @@ export default function Crud(props) {
       <Search {...props.search} />
       <ButtonAdd {...props.buttonAdd} />
       <Table {...props.table} />
-      <ModalForm {...props.modalForm} />
+      <ModalForm {...props.modalForm}>{children}</ModalForm>
     </React.Fragment>
   );
 }

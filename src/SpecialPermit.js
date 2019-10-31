@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import Crud from "./components/Crud";
-import { Form } from "antd";
+import { Input, Form } from "antd";
 
 function SpecialPermit({ form }) {
-  const { validateFieldsAndScroll } = form;
+  const { getFieldDecorator, validateFieldsAndScroll } = form;
 
   let searchParams = {
     placeholder: "Find Special Login"
@@ -55,7 +55,14 @@ function SpecialPermit({ form }) {
       table={tableParams}
       buttonAdd={buttonAddParams}
       modalForm={modalFormParams}
-    />
+    >
+      <Form.Item>
+        {getFieldDecorator("description", {
+          initialValue: "",
+          rules: [{ required: true, message: "Please input your description!" }]
+        })(<Input placeholder="Description" />)}
+      </Form.Item>
+    </Crud>
   );
 }
 
