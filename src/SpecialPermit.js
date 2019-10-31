@@ -8,16 +8,21 @@ function SpecialPermit({ form }) {
   let searchParams = {
     placeholder: "Find Special Login"
   };
-  let buttonAddParams = {
-    title: "Add Special Permit"
-  };
-  let tableParams = {
+  const [buttonAddParams, setbuttonAddParams] = useState({
+    title: "Add Special Permit",
+    onClickAdd: () => {
+      onClickAdd();
+    }
+  });
+
+  const [tableParams, settableParams] = useState({
     btn_add_title: "Add Special Permit"
-  };
+  });
+
   const [modalFormParams, setmodalFormParams] = useState({
     form,
     title: "Add Special Permit",
-    visible: true,
+    visible: false,
     handleOk: () => {
       modalOk();
     },
@@ -27,17 +32,20 @@ function SpecialPermit({ form }) {
   });
 
   function modalOk() {
-
     validateFieldsAndScroll((errors, values) => {
       if (!errors) {
-        setmodalFormParams({...modalFormParams, visible: false});    
+        console.log(values);
+        setmodalFormParams({ ...modalFormParams, visible: false });
       }
     });
-    
   }
 
   function modalCancel() {
-    setmodalFormParams({...modalFormParams, visible: false});    
+    setmodalFormParams({ ...modalFormParams, visible: false });
+  }
+
+  function onClickAdd() {
+    setmodalFormParams({ ...modalFormParams, visible: true });
   }
 
   return (
