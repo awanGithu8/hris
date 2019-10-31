@@ -1,25 +1,43 @@
-import React from "react";
+import React, { useState } from "react";
 import Crud from "./components/Crud";
+import { Form } from "antd";
 
-export default function SpecialPermit() {
+function SpecialPermit({ form }) {
+  const { validateFieldsAndScroll } = form;
+
   let searchParams = {
     placeholder: "Find Special Login"
   };
   let buttonAddParams = {
     title: "Add Special Permit"
-  }
-  let tableParams = {
-      btn_add_title: "Add Special Permit"
   };
+  let tableParams = {
+    btn_add_title: "Add Special Permit"
+  };
+  const [modalFormParams, setmodalFormParams] = useState({
+    form,
+    title: "Add Special Permit",
+    visible: true,
+    handleOk: () => {
+      modalOk();
+    },
+    handleCancel: () => {
+      modalCancel();
+    }
+  });
 
-  function searchData(e) {
-    // let dataFilter = data.filter(function (d) {
-    //   return (
-    //     d.username.toLowerCase().includes(e.target.value.toLowerCase()) ||
-    //     d.role.toLowerCase().includes(e.target.value.toLowerCase())
-    //   );
-    // });
-    // setdataSource(dataFilter);
+  function modalOk() {
+
+    validateFieldsAndScroll((errors, values) => {
+      if (!errors) {
+        setmodalFormParams({...modalFormParams, visible: false});    
+      }
+    });
+    
+  }
+
+  function modalCancel() {
+    setmodalFormParams({...modalFormParams, visible: false});    
   }
 
   return (
@@ -28,7 +46,10 @@ export default function SpecialPermit() {
       search={searchParams}
       table={tableParams}
       buttonAdd={buttonAddParams}
-      onPressEnter={searchData}
+      modalForm={modalFormParams}
     />
   );
 }
+
+const SpecialPermitForm = Form.create({ name: "SpecialPermit" })(SpecialPermit);
+export default SpecialPermitForm;
