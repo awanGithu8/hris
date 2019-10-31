@@ -9,6 +9,7 @@ const User = require("./user");
 const Division = require("./division");
 const JobTitle = require("./job_title");
 const Cuti = require("./cuti");
+const SpecialLeave = require("./special_leave");
 /* End Import Schema */
 
 const API_PORT = 3001;

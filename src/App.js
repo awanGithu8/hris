@@ -1,5 +1,5 @@
 import React from "react";
-import "./App.css";
+import "./css/App.css";
 import Layout from "./Layout";
 
 import Home from "./Home";
@@ -11,6 +11,7 @@ import JobTitle from "./JobTitle";
 import Cuti from "./Cuti";
 import Approval from "./Approval";
 import RequestCuti from "./RequestCuti";
+import SpecialLogin from "./SpecialLogin";
 
 import { Route, HashRouter } from "react-router-dom";
 
@@ -32,6 +33,7 @@ function App() {
               <Route path="/add_cuti" component={RequestCuti} />
               <Route path="/job_title" component={JobTitle} />
               <Route path="/login" component={Login} />
+              <Route path="/special_leave" component={SpecialLogin} />
             </header>
           </Layout>
         </UserProvider>
