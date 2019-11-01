@@ -1,12 +1,12 @@
 import React, { useState } from "react";
 import Crud from "./components/Crud";
-import { Input, Form } from "antd";
+import { Input, Form, InputNumber } from "antd";
 
 function SpecialPermit({ form }) {
   const { getFieldDecorator, validateFieldsAndScroll } = form;
 
   let searchParams = {
-    placeholder: "Find Special Login"
+    placeholder: "Find Special Permit"
   };
   const [buttonAddParams, setbuttonAddParams] = useState({
     title: "Add Special Permit",
@@ -59,8 +59,14 @@ function SpecialPermit({ form }) {
       <Form.Item>
         {getFieldDecorator("description", {
           initialValue: "",
-          rules: [{ required: true, message: "Please input your description!" }]
+          rules: [{ required: true, message: "Please input special title description!" }]
         })(<Input placeholder="Description" />)}
+      </Form.Item>
+      <Form.Item>
+        {getFieldDecorator("permit_total", {
+          initialValue: "",
+          rules: [{ required: true, message: "Please set permit total!" }]
+        })(<InputNumber style={{ width: "100%" }} placeholder="Permit Total" />)}
       </Form.Item>
     </Crud>
   );

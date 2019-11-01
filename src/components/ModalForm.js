@@ -1,8 +1,7 @@
 import React from "react";
 import { Modal, Form } from "antd";
 
-export default function ModalFormComponent(props, {children}) {
-    console.log(children)
+export default function ModalFormComponent(props) {
   return (
     <Modal
       title={props.title}
@@ -12,7 +11,7 @@ export default function ModalFormComponent(props, {children}) {
       destroyOnClose={true}
     >
       <Form className="login-form">
-        {children}
+        {props.children}
       </Form>
     </Modal>
   );
