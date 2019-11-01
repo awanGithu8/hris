@@ -251,7 +251,7 @@ function User({ form }) {
         onCancel={handleCancel}
         destroyOnClose={true}
       >
-        <Form className="login-form">
+        <Form> {/* className="login-form" */}
           {
             modalData.edit_type !== "change_password" &&
             <Form.Item>

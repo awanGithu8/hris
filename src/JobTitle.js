@@ -199,7 +199,7 @@ function JobTitle({ form }) {
         onCancel={handleCancel}
         destroyOnClose={true}
       >
-        <Form className="login-form">
+        <Form> {/* className="login-form" */ }
           <Form.Item>
             {getFieldDecorator("description", {
               initialValue: modalData ? modalData.description : "",

@@ -10,7 +10,7 @@ export default function ModalFormComponent(props) {
       onCancel={props.handleCancel}
       destroyOnClose={true}
     >
-      <Form className="login-form">
+      <Form>
         {props.children}
       </Form>
     </Modal>
