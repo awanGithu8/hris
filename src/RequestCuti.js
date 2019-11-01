@@ -10,7 +10,8 @@ import {
   notification,
   Row,
   Col,
-  Table
+  Table,
+  message
 } from "antd";
 
 import moment from "moment";
@@ -119,9 +120,11 @@ function RequestCutiForm({ form }) {
     let special_permit = [];
     axios.get(BACKEND_URL + "listSpecialPermit").then(res => {
       for (const [index, value] of res.data.data.entries()) {
-        special_permit.push(         
-
-          <Option key={index} value={`${value["_id"]}___${value["permit_total"]}`}>
+        special_permit.push(
+          <Option
+            key={index}
+            value={`${value["_id"]}___${value["permit_total"]}`}
+          >
             {value.description}
           </Option>
         );
@@ -190,60 +193,83 @@ function RequestCutiForm({ form }) {
     setPermitTotal(permit_total);
   }
 
+  function processData(values) {
+    values.from_date = values.date[0].format("DD-MM-YYYY");
+    values.to_date = values.date[1].format("DD-MM-YYYY");
+    delete values["date"];
+
+    let id_divisi = values.user_id.split("___")[1];
+    values.user_id = values.user_id.split("___")[0];
+    values.approver_id = division[id_divisi].approver_id;
+
+    values.total_days = permitTotal;
+    values.work_date = workingDate;
+
+    values.special_permit_id = values.special_leave
+      ? values.special_leave.split("___")[0]
+      : "";
+    values.special_permit_saldo = values.special_leave
+      ? values.special_leave.split("___")[1]
+      : 0;
+    delete values.special_leave;
+
+    return values;
+  }
+
+  function sendEmail(values) {
+    /* Send Email start */
+    const templateParams = {
+      name: dataUserArray[values.user_id].name,
+      type: values.type,
+      reason: values.reason,
+      from_date: values.from_date,
+      to_date: values.to_date,
+      total_days: values.total_days,
+      work_date: values.work_date
+    };
+
+    emailjs
+      .send(
+        "gmail",
+        "template_lWWmau5h",
+        templateParams,
+        "user_eSLT70utivabYk1qRYlEa"
+      )
+      .then(
+        response => {
+          console.log("SUCCESS!", response.status, response.text);
+        },
+        err => {
+          console.log("FAILED...", err);
+        }
+      );
+    /* Send Email End */
+  }
+
   function handleSubmit(e) {
     e.preventDefault();
     validateFieldsAndScroll((err, values) => {
       if (!err) {
-        values.from_date = values.date[0].format("DD-MM-YYYY");
-        values.to_date = values.date[1].format("DD-MM-YYYY");
-
-        let id_divisi = values.user_id.split("___")[1];
-        values.user_id = values.user_id.split("___")[0];
-
-        values.approver_id = division[id_divisi].approver_id;
-
-        delete values["date"];
-
-        values.total_days = permitTotal;
-        values.work_date = workingDate;
-
-        console.log(dataUserArray);
-        console.log("Received values of form: ", values);
-        try {
-          axios.post(BACKEND_URL + "addCuti", values);
-          openNotificationWithIcon("success");
-          resetFields();
-
-          /* Send Email start */
-          const templateParams = {
-            name: dataUserArray[values.user_id].name,
-            type: values.type,
-            reason: values.reason,
-            from_date: values.from_date,
-            to_date: values.to_date,
-            total_days: values.total_days,
-            work_date: values.work_date
-          };
-
-          emailjs
-            .send(
-              "gmail",
-              "template_lWWmau5h",
-              templateParams,
-              "user_eSLT70utivabYk1qRYlEa"
-            )
-            .then(
-              response => {
-                console.log("SUCCESS!", response.status, response.text);
-              },
-              err => {
-                console.log("FAILED...", err);
-              }
-            );
-          /* Send Email End */
-          refreshData();
-        } catch (e) {
-          console.log("Something went wrong " + e);
+        values = processData(values);
+        console.log("Value cuy: ", values);
+        if (
+          values.special_permit_saldo > 0 &&
+          values.total_days > values.special_permit_saldo
+        ) {
+          message.warning(
+            "Max total permit day for this special permit is: " +
+              values.special_permit_saldo
+          );
+        } else {
+          try {
+            axios.post(BACKEND_URL + "addCuti", values);
+            openNotificationWithIcon("success");
+            resetFields();
+            sendEmail(values);
+            refreshData();
+          } catch (e) {
+            console.log("Something went wrong " + e);
+          }
         }
       }
     });
@@ -331,7 +357,6 @@ function RequestCutiForm({ form }) {
   }
 
   function refreshData() {
-    console.log(session_user["_id"]);
     setFirstLoad(true);
     setTimeout(
       function() {
@@ -340,7 +365,6 @@ function RequestCutiForm({ form }) {
             user_id: session_user["_id"]
           })
           .then(res => {
-            console.log(res);
             setDataNeed(res.data.data);
           });
       }.bind(this),
@@ -414,7 +438,11 @@ function RequestCutiForm({ form }) {
                   whitespace: true
                 }
               ]
-            })(<Select placeholder="Select Special Leave">{specialPermit}</Select>)}
+            })(
+              <Select placeholder="Select Special Leave">
+                {specialPermit}
+              </Select>
+            )}
           </Form.Item>
         )}
         <Row>
