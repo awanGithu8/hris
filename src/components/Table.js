@@ -8,7 +8,7 @@ export default function TableComponent(props) {
       columns={props.columns}
       pagination={{ defaultPageSize: 6, showSizeChanger: false }}
       rowKey="_id"
-      loading={props.firstLoad}
+      loading={props.loading}
     />
   );
 }
