@@ -24,7 +24,9 @@ const dbRoute =
   "mongodb+srv://santuy:santuy@santuycluster-9nevr.gcp.mongodb.net/test?retryWrites=true&w=majority";
 
 // connects our back end code with the database
-mongoose.connect(dbRoute, { useNewUrlParser: true });
+mongoose.connect(dbRoute, { useNewUrlParser: true }, function(err) {
+  if (err) { return console.error('Failed connect to database ', err);}
+});
 
 let db = mongoose.connection;
 

@@ -5,6 +5,7 @@ const Schema = mongoose.Schema;
 const DataSchema = new Schema(
   {
     description: {type: String, unique: true, required: true},
+    permit_total: {type: Number, required: true}
   },
   { timestamps: true }
 );

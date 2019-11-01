@@ -25,7 +25,7 @@ const { Option } = Select;
 const { TextArea } = Input;
 const { RangePicker } = DatePicker;
 
-function RegistrationForm({ form }) {
+function RequestCutiForm({ form }) {
   let session_user = JSON.parse(window.localStorage.getItem("datauser"));
 
   const { getFieldDecorator, validateFieldsAndScroll, resetFields } = form;
@@ -55,11 +55,12 @@ function RegistrationForm({ form }) {
 
   useEffect(() => {
     refreshData();
+    getRequester();
+  }, []);
 
+  function getRequester(){
     let divisions = getDivision();
     let job_titles = getJobTitle();
-
-    console.log(jobTitle);
 
     axios.get(BACKEND_URL + "getData").then(res => {
       let users = [];
@@ -89,7 +90,7 @@ function RegistrationForm({ form }) {
       setdataUser(users);
       setdataUserArray(user_array);
     });
-  }, []);
+  }
 
   function getDivision() {
     let arr_division = [];
@@ -482,5 +483,5 @@ function RegistrationForm({ form }) {
   );
 }
 
-const RequestCuti = Form.create({ name: "register" })(RegistrationForm);
+const RequestCuti = Form.create({ name: "register" })(RequestCutiForm);
 export default RequestCuti;
