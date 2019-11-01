@@ -257,8 +257,7 @@ function RequestCutiForm({ form }) {
           values.total_days > values.special_permit_saldo
         ) {
           message.warning(
-            "Max total permit day for this special permit is: " +
-              values.special_permit_saldo
+            `Max total permit day for this special permit is: ${values.special_permit_saldo} Day` 
           );
         } else {
           try {
