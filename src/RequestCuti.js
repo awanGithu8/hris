@@ -34,6 +34,7 @@ function RequestCutiForm({ form }) {
   const [dataUserArray, setdataUserArray] = useState([]);
   const [division, setDivision] = useState([]);
   const [jobTitle, setJobTitle] = useState([]);
+  const [specialPermit, setSpecialPermit] = useState([]);
   const [permitTotal, setPermitTotal] = useState(1);
   const [type, setType] = useState("Annual Leave");
 
@@ -55,13 +56,13 @@ function RequestCutiForm({ form }) {
 
   useEffect(() => {
     refreshData();
-    getRequester();
-  }, []);
-
-  function getRequester(){
+    getSpecialPermit();
     let divisions = getDivision();
     let job_titles = getJobTitle();
+    getRequester(divisions, job_titles);
+  }, []);
 
+  function getRequester(divisions, job_titles) {
     axios.get(BACKEND_URL + "getData").then(res => {
       let users = [];
       let user_array = [];
@@ -112,6 +113,21 @@ function RequestCutiForm({ form }) {
     });
     setJobTitle(job_title);
     return job_title;
+  }
+
+  function getSpecialPermit() {
+    let special_permit = [];
+    axios.get(BACKEND_URL + "listSpecialPermit").then(res => {
+      for (const [index, value] of res.data.data.entries()) {
+        special_permit.push(         
+
+          <Option key={index} value={`${value["_id"]}___${value["permit_total"]}`}>
+            {value.description}
+          </Option>
+        );
+      }
+    });
+    setSpecialPermit(special_permit);
   }
 
   function onChangeType(value) {
@@ -380,7 +396,7 @@ function RequestCutiForm({ form }) {
               }
             ]
           })(
-            <Select onChange={onChangeType}>
+            <Select placeholder="Select Permit Type" onChange={onChangeType}>
               <Option value="Annual Leave">Annual Leave</Option>
               <Option value="Sick Leave">Sick Leave</Option>
               <Option value="Special Leave">Special Leave</Option>
@@ -390,7 +406,7 @@ function RequestCutiForm({ form }) {
         {type === "Special Leave" && (
           <Form.Item label={<span>Special Leave&nbsp;</span>} className={mb5}>
             {getFieldDecorator("special_leave", {
-              initialValue: "",
+              initialValue: undefined,
               rules: [
                 {
                   required: true,
@@ -398,13 +414,7 @@ function RequestCutiForm({ form }) {
                   whitespace: true
                 }
               ]
-            })(
-              <Select>
-                <Option value="Pernikahan">Pernikahan</Option>
-                <Option value="Kematian Kucing">Kematian Kucing</Option>
-                <Option value="Pernikahan Kucing">Pernikahan Kucing</Option>
-              </Select>
-            )}
+            })(<Select placeholder="Select Special Leave">{specialPermit}</Select>)}
           </Form.Item>
         )}
         <Row>
