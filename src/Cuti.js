@@ -122,9 +122,10 @@ function Cuti() {
       <Table
         dataSource={dataSource}
         columns={columns}
-        pagination={{ defaultPageSize: 8, showSizeChanger: false }}
+        pagination={false}//{{ defaultPageSize: 8, showSizeChanger: false }}
         rowKey="_id"
         loading={firstLoad}
+        scroll={{ y: 500 }}
       />
     </React.Fragment>
   );

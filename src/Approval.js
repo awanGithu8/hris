@@ -40,7 +40,8 @@ function Approval() {
       sorter: (a, b) => a.user_id.length - b.user_id.length,
       render: text => {
         return dataUser[text]?dataUser[text].name:"";
-      }          
+      },
+      width: 200
     },
     {
       title: 'Type',
@@ -215,9 +216,10 @@ function Approval() {
         <Table
           dataSource={dataSource}
           columns={columns}
-          pagination={{ defaultPageSize: 7, showSizeChanger: false }}
+          pagination={false} //{{ defaultPageSize: 5, showSizeChanger: false }}
           rowKey="_id" 
           loading={firstLoad}
+          scroll={{ y: 500 }}
         />
       </React.Fragment>
     );
