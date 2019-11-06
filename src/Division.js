@@ -121,10 +121,7 @@ function Division({ form }) {
     console.log(e.target.value);
     console.log(data);
     let dataFilter = data.filter(function(d) {
-      return d.description.toLowerCase().includes(e.target.value.toLowerCase())
-        ||
-        dataApproverUsername[d.approver_id].toLowerCase().includes(e.target.value.toLowerCase())
-        ;
+      return d.description.toLowerCase().includes(e.target.value.toLowerCase()); // dataApproverUsername[d.approver_id]?dataApproverUsername[d.approver_id].toLowerCase():""
     });
     setdataSource(dataFilter);
   }
