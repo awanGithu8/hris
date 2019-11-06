@@ -125,7 +125,7 @@ function RequestCutiForm({ form }) {
             key={index}
             value={`${value["_id"]}___${value["permit_total"]}`}
           >
-            {value.description}
+            {`${value.description} @${value["permit_total"]} Day`}
           </Option>
         );
       }
