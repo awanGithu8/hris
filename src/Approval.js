@@ -6,6 +6,8 @@ import axios from 'axios';
 
 import {BACKEND_URL} from "./config/connection";
 
+import {notifApprovePermit} from "./helpers/Email";
+
 const { confirm } = Modal;
 
 function Approval() {
@@ -106,7 +108,7 @@ function Approval() {
     console.log(total_days);
     confirm({
       title: `Are you sure approve this ${type}?`,
-      content: `Name: ${user_id} [${from_date} s/d ${to_date}]`,
+      content: `Name: ${dataUser[user_id].name} [${from_date} s/d ${to_date}]`,
       okText: 'Yes',
       cancelText: 'No',
       onOk() {
@@ -117,6 +119,10 @@ function Approval() {
         });
         openNotificationWithIcon('success', 'approve');
         refreshData();
+
+
+        data.name = dataUser[user_id].name;
+        notifApprovePermit(data);
       },
       onCancel() {
         console.log('Cancel');
