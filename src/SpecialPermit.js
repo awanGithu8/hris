@@ -25,7 +25,7 @@ function SpecialPermit({ form }) {
       key: "action",
       render: (text, record) => (
         <span>
-          <Tooltip title="Edit Permit">
+          <Tooltip title="Edit Permit" onClick={() => onClickEdit(record)}>
             <Button type="primary">
               <Icon type="edit" />
             </Button>
@@ -67,28 +67,64 @@ function SpecialPermit({ form }) {
     },
     handleCancel: () => {
       modalCancel();
-    }
+    },
+    modalData: ""
   });
 
   function modalOk() {
     validateFieldsAndScroll((errors, values) => {
       if (!errors) {
-        console.log(values);
-        setmodalFormParams({ ...modalFormParams, visible: false });
+        console.log(modalFormParams.modalData);
+        // if (modalFormParams.modalData == "") {
+        //   axios.post(BACKEND_URL + "addSpecialPermit", values);
+        // }else{
+        //   axios.post(BACKEND_URL + "updateSpecialPermit", {
+        //     id: modalFormParams.modalData["_id"],
+        //     update: values
+        //   });
+        // }
+        // setmodalFormParams({ ...modalFormParams, modalData: "", visible: false });
+        // refreshData();
       }
     });
   }
 
   function modalCancel() {
-    setmodalFormParams({ ...modalFormParams, visible: false });
+    setmodalFormParams({ ...modalFormParams, modalData: "", visible: false });
   }
 
   function onClickAdd() {
     setmodalFormParams({ ...modalFormParams, visible: true });
-    refreshData();
   }
 
+  function onClickEdit(record) {
+    setmodalFormParams({ ...modalFormParams, title: "Edit Special Permit", modalData: record, visible: true });
+  }
+
+  // function onClickDelete(record) {
+  //   confirm({
+  //     title: `Are you sure delete this division ${record.description} ?`,
+  //     content: "When division deleted you can't get it back",
+  //     okText: "Yes",
+  //     okType: "danger",
+  //     cancelText: "No",
+  //     onOk() {
+  //       axios.delete(BACKEND_URL + "deleteDivision", {
+  //         data: {
+  //           id: record["_id"]
+  //         }
+  //       });
+  //       refreshData();
+  //     },
+  //     onCancel() {
+  //       console.log("Cancel");
+  //     }
+  //   });
+  // }
+
+
   function refreshData() {
+    settableParams({ ...tableParams, loading: true });
     setTimeout(function() {
       axios.get(BACKEND_URL + "listSpecialPermit").then(res => {
         settableParams({ ...tableParams, dataSource: res.data.data, loading: false });
@@ -110,7 +146,7 @@ function SpecialPermit({ form }) {
     >
       <Form.Item>
         {getFieldDecorator("description", {
-          initialValue: "",
+          initialValue: modalFormParams.modalData.description?modalFormParams.modalData.description:"",
           rules: [
             {
               required: true,
@@ -121,7 +157,7 @@ function SpecialPermit({ form }) {
       </Form.Item>
       <Form.Item>
         {getFieldDecorator("permit_total", {
-          initialValue: "",
+          initialValue: modalFormParams.modalData.permit_total?modalFormParams.modalData.permit_total:"",
           rules: [{ required: true, message: "Please set permit total!" }]
         })(
           <InputNumber style={{ width: "100%" }} placeholder="Permit Total" />
