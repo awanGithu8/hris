@@ -5,7 +5,7 @@ export default function Home(){
 
     return (
         <div>
-            <center>Santuy Human Resources Information System</center> 
+            <center>PT. Supranusa Sindata Permit System</center> 
             <br/><br/>
             Welcome {session_user.name}
         </div>    

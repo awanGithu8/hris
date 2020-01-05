@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from "react";
 import Crud from "./components/Crud";
-import { Input, Form, InputNumber, Tooltip, Button, Icon, Divider } from "antd";
+import { Input, Form, InputNumber, Tooltip, Button, Icon, Divider, Modal } from "antd";
 import axios from "axios";
 import { BACKEND_URL } from "./config/connection";
+
+const {confirm} = Modal;
 
 function SpecialPermit({ form }) {
   const { getFieldDecorator, validateFieldsAndScroll } = form;
@@ -31,7 +33,7 @@ function SpecialPermit({ form }) {
             </Button>
           </Tooltip>
           <Divider type="vertical" />
-          <Tooltip title="Delete Permit">
+          <Tooltip title="Delete Permit" onClick={() => onClickDelete(record)}>
             <Button type="danger">
               <Icon type="delete" />
             </Button>
@@ -74,17 +76,19 @@ function SpecialPermit({ form }) {
   function modalOk() {
     validateFieldsAndScroll((errors, values) => {
       if (!errors) {
-        console.log(modalFormParams.modalData);
-        // if (modalFormParams.modalData == "") {
-        //   axios.post(BACKEND_URL + "addSpecialPermit", values);
-        // }else{
-        //   axios.post(BACKEND_URL + "updateSpecialPermit", {
-        //     id: modalFormParams.modalData["_id"],
-        //     update: values
-        //   });
-        // }
-        // setmodalFormParams({ ...modalFormParams, modalData: "", visible: false });
-        // refreshData();
+        let id = values.id;
+        delete values.id;
+        console.log(values);
+        if (id == "") {
+          axios.post(BACKEND_URL + "addSpecialPermit", values);
+        }else{
+          axios.post(BACKEND_URL + "updateSpecialPermit", {
+            id: id,
+            update: values
+          });
+        }
+        setmodalFormParams({ ...modalFormParams, modalData: "", visible: false });
+        refreshData();
       }
     });
   }
@@ -101,26 +105,26 @@ function SpecialPermit({ form }) {
     setmodalFormParams({ ...modalFormParams, title: "Edit Special Permit", modalData: record, visible: true });
   }
 
-  // function onClickDelete(record) {
-  //   confirm({
-  //     title: `Are you sure delete this division ${record.description} ?`,
-  //     content: "When division deleted you can't get it back",
-  //     okText: "Yes",
-  //     okType: "danger",
-  //     cancelText: "No",
-  //     onOk() {
-  //       axios.delete(BACKEND_URL + "deleteDivision", {
-  //         data: {
-  //           id: record["_id"]
-  //         }
-  //       });
-  //       refreshData();
-  //     },
-  //     onCancel() {
-  //       console.log("Cancel");
-  //     }
-  //   });
-  // }
+  function onClickDelete(record) {
+    confirm({
+      title: `Are you sure delete ${record.description} ?`,
+      content: "When this special permit deleted you can't get it back",
+      okText: "Yes",
+      okType: "danger",
+      cancelText: "No",
+      onOk() {
+        axios.delete(BACKEND_URL + "deleteSpecialPermit", {
+          data: {
+            id: record["_id"]
+          }
+        });
+        refreshData();
+      },
+      onCancel() {
+        console.log("Cancel");
+      }
+    });
+  }
 
 
   function refreshData() {
@@ -136,6 +140,10 @@ function SpecialPermit({ form }) {
     refreshData();
   }, [])
 
+  useEffect(() => {
+    console.log(modalFormParams);
+  }, [modalFormParams])
+
   return (
     <Crud
       title={"Special Permit List"}
@@ -144,13 +152,18 @@ function SpecialPermit({ form }) {
       buttonAdd={buttonAddParams}
       modalForm={modalFormParams}
     >
+      <Form.Item className={"display-none"}>
+      {getFieldDecorator("id", {
+          initialValue: modalFormParams.modalData["_id"]?modalFormParams.modalData["_id"]:"",
+        })(<Input />)}        
+      </Form.Item>
       <Form.Item>
         {getFieldDecorator("description", {
           initialValue: modalFormParams.modalData.description?modalFormParams.modalData.description:"",
           rules: [
             {
               required: true,
-              message: "Please input special title description!"
+              message: "Please input special permit description!"
             }
           ]
         })(<Input placeholder="Description" />)}
