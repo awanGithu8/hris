@@ -14,12 +14,13 @@ function SpecialPermit({ form }) {
       title: "Description",
       dataIndex: "description",
       key: "description",
-      sorter: (a, b) => a.description.length - b.description.length
+      sorter: (a, b) => a.description.localeCompare(b.description)
     },
     {
       title: "Permit Total",
       dataIndex: "permit_total",
-      key: "permit_total"
+      key: "permit_total",
+      sorter: (a, b) => a.permit_total - b.permit_total,
     },
     {
       title: "Action",
@@ -46,6 +47,7 @@ function SpecialPermit({ form }) {
   let searchParams = {
     placeholder: "Find Special Permit"
   };
+  
   const [buttonAddParams, setbuttonAddParams] = useState({
     title: "Add Special Permit",
     onClickAdd: () => {
@@ -140,15 +142,11 @@ function SpecialPermit({ form }) {
     refreshData();
   }, [])
 
-  useEffect(() => {
-    console.log(modalFormParams);
-  }, [modalFormParams])
-
   return (
     <Crud
       title={"Special Permit List"}
       search={searchParams}
-      table={tableParams}
+      table={{tableParams, settableParams}}
       buttonAdd={buttonAddParams}
       modalForm={modalFormParams}
     >

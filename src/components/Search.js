@@ -7,7 +7,7 @@ export default function SearchComponent(props) {
       <Col span={22}>
         <Input
           placeholder={props.placeholder}
-          onPressEnter={props.onPressEnter}
+          onPressEnter={props.onSearch}
         />
       </Col>
       <Col span={2}>

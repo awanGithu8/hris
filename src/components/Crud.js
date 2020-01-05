@@ -5,14 +5,22 @@ import ButtonAdd from "./ButtonAdd";
 import ModalForm from "./ModalForm";
 
 export default function Crud(props) {
+  function onSearch(e) {
+    let searchValue = e.target.value;
+    let dataFilter = props.table.tableParams.dataSource.filter(function(d) {
+      return d.description.toLowerCase().includes(searchValue.toLowerCase());
+    });
+
+    props.table.settableParams({ ...props.table.tableParams, dataSource: dataFilter});
+  }
   return (
     <React.Fragment>
       <center>
         <h3>{props.title}</h3>
       </center>
-      <Search {...props.search} />
+      <Search {...props.search} onSearch={onSearch} />
       <ButtonAdd {...props.buttonAdd} />
-      <Table {...props.table} />
+      <Table {...props.table.tableParams} />
       <ModalForm {...props.modalForm}>
         {props.children}
       </ModalForm>
