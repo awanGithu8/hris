@@ -7,7 +7,7 @@ import ModalForm from "./ModalForm";
 export default function Crud(props) {
   function onSearch(e) {
     let searchValue = e.target.value;
-    let dataFilter = props.table.tableParams.dataSource.filter(function(d) {
+    let dataFilter = props.table.tableParams.dataSourceOri.filter(function(d) {
       return d.description.toLowerCase().includes(searchValue.toLowerCase());
     });
 

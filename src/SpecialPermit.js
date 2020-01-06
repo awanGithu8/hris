@@ -58,6 +58,7 @@ function SpecialPermit({ form }) {
   const [tableParams, settableParams] = useState({
     btn_add_title: "Add Special Permit",
     columns: columns,
+    dataSourceOri: [],
     dataSource: [],
     loading: true
   });
@@ -133,7 +134,7 @@ function SpecialPermit({ form }) {
     settableParams({ ...tableParams, loading: true });
     setTimeout(function() {
       axios.get(BACKEND_URL + "listSpecialPermit").then(res => {
-        settableParams({ ...tableParams, dataSource: res.data.data, loading: false });
+        settableParams({ ...tableParams, dataSource: res.data.data, dataSourceOri: res.data.data, loading: false });
       });
     }, 1000);
   }
