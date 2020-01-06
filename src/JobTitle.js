@@ -220,15 +220,15 @@ function JobTitle({ form }) {
         <h3>Job Title List</h3>
       </center>
       <Row>
-        <Col span={22}>
+        <Col span={24}>
           <Input placeholder="Find Job Title" onPressEnter={searchData} />
         </Col>
-        <Col span={2}>
+        {/* <Col span={2}>
           <Button type="primary" icon="search">
             Search
           </Button>
-        </Col>
-      </Row>
+        </Col>*/}
+      </Row> 
       <Button
         type="primary"
         icon="plus-square"

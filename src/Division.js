@@ -222,14 +222,14 @@ function Division({ form }) {
         <h3>Division List</h3>
       </center>
       <Row>
-        <Col span={22}>
+        <Col span={24}>
           <Input placeholder="Find Division" onPressEnter={searchData} />
         </Col>
-        <Col span={2}>
+        {/* <Col span={2}>
           <Button type="primary" icon="search">
             Search
           </Button>
-        </Col>
+        </Col> */}
       </Row>
       <Button
         type="primary"
