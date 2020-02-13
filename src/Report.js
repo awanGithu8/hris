@@ -1,18 +1,19 @@
 import React, { useState, useEffect } from 'react';
-
 import { Table, Input, Form, Button } from 'antd';
-
 import axios from 'axios';
-
 import { BACKEND_URL } from "./config/connection";
+import { Doughnut, Bar } from 'react-chartjs-2';
 
 
 function Report() {
-  const [dataSource, setdataSource] = useState([]);
-  const [firstLoad, setFirstLoad]   = useState(true)
-  const [data, setData]             = useState([]);
-  const [dataUser, setdataUser]     = useState([]);
-  const [reportType, setReportType] = useState("table");
+  const [dataSource, setdataSource]         = useState([]);
+  const [firstLoad, setFirstLoad]           = useState(true)
+  const [data, setData]                     = useState([]);
+  const [dataUser, setdataUser]             = useState([]);
+  const [reportType, setReportType]         = useState("table");
+  const [arrNames, setArrNames]             = useState([]);
+  const [arrColors, setArrColors]           = useState([]);
+  const [arrJumlahCuti, setArrJumlahCuti]  = useState([]);
 
   const columns = [
     {
@@ -69,9 +70,34 @@ function Report() {
 
 
   useEffect(() => {
-    getUsers();
-    refreshData();
+      getUsers();
+      refreshData();
   }, [])
+
+  useEffect(() => {
+      if (reportType !== "table") {    
+          let tmparrNames   = [];
+          let tmparrColors  = [];
+          let tmpJumlahCuti = [];
+          for (const user in dataUser) {
+              if (dataUser.hasOwnProperty(user)) {
+                tmparrNames.push(dataUser[user].name);
+                tmparrColors.push(getRandomColor());
+
+                let jumlahCuti = 0;
+                data.forEach(cuti => {
+                    if (cuti.user_id === user) {
+                        jumlahCuti += cuti.total_days   
+                    }
+                });
+                tmpJumlahCuti.push(jumlahCuti)
+              }
+          }
+          setArrNames(tmparrNames);
+          setArrColors(tmparrColors);
+          setArrJumlahCuti(tmpJumlahCuti);
+      }
+  }, [reportType])
 
   function getUsers() {
     axios.get(BACKEND_URL + "getData").then(res => {
@@ -116,6 +142,15 @@ function Report() {
     setdataSource(dataFilter);
   }
 
+  function getRandomColor() {
+    var letters = '0123456789ABCDEF'.split('');
+    var color = '#';
+    for (var i = 0; i < 6; i++ ) {
+        color += letters[Math.floor(Math.random() * 16)];
+    }
+    return color;
+}
+
   return (
     <React.Fragment>
       <center><h3>Report</h3></center>
@@ -127,6 +162,8 @@ function Report() {
           <Button type="primary" icon="table" onClick={() => setReportType('table')} /> 
           <span> </span>
           <Button type="primary" icon="bar-chart" onClick={() => setReportType('chart')} />
+          <span> </span>
+          <Button type="primary" icon="pie-chart" onClick={() => setReportType('donat')} />
       </div>
        {
             reportType === "table" && (
@@ -140,10 +177,54 @@ function Report() {
                 />        
             )            
        }
-
        {
            reportType === "chart" && (
-               <div>This is chart</div>
+                   <Bar
+                       data = {
+                           {
+                            labels: arrNames,
+                            datasets: [
+                                {
+                                    label: "Jumlah Cuti",
+                                    backgroundColor: arrColors,
+                                    data: arrJumlahCuti
+                                }
+                                ]                           
+                           }
+                       }
+                       options={
+                        {
+                            legend: { display: false },
+                            title: {
+                              display: true,
+                              text: 'Report Cuti Berdasarkan Jumlah tahun 2020'
+                            }
+                          }
+                       } 
+                       width={100}
+                       height={45}
+                       // options={{ maintainAspectRatio: false }}
+                   />
+           )
+       }
+       {
+           reportType === 'donat' && (
+                <Doughnut
+                    data = {
+                        {
+                            datasets: [{
+                                data: arrJumlahCuti,
+                                backgroundColor: arrColors
+                            }],
+                        
+                            // These labels appear in the legend and in the tooltips when hovering different arcs
+                            labels: arrNames
+                        }
+                    }
+                    width={100}
+                    height={50}
+                    // options={{ maintainAspectRatio: false }}
+                />
            )
        }
 
