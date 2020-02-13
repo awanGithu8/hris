@@ -19,7 +19,11 @@ function Report() {
       title: 'Name',
       dataIndex: 'user_id',
       key: 'user_id',
-      sorter: (a, b) => a.user_id.length - b.user_id.length,
+      sorter: (a, b) => {
+          let nameA = dataUser[a.user_id] ?  dataUser[a.user_id].name.length : "";
+          let nameB = dataUser[b.user_id] ? dataUser[b.user_id].name.length : "";
+          return nameA - nameB
+        },
       render: text => {
         return dataUser[text]?dataUser[text].name:"";
       }      
