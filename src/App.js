@@ -12,6 +12,8 @@ import Cuti from "./Cuti";
 import Approval from "./Approval";
 import RequestCuti from "./RequestCuti";
 import SpecialPermit from "./SpecialPermit";
+import Report from "./Report";
+
 
 import { Route, HashRouter } from "react-router-dom";
 
@@ -34,6 +36,7 @@ function App() {
               <Route path="/job_title" component={JobTitle} />
               <Route path="/login" component={Login} />
               <Route path="/special_leave" component={SpecialPermit} />
+              <Route path="/report" component={Report} />
             </header>
           </Layout>
         </UserProvider>

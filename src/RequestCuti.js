@@ -280,7 +280,7 @@ function RequestCutiForm({ form }) {
       title: "Type",
       dataIndex: "type",
       key: "type",
-      width: 75
+      width: 100
     },
     {
       title: "From Date",
@@ -300,7 +300,7 @@ function RequestCutiForm({ form }) {
       key: "total_days",
       align: "right",
       sorter: (a, b) => a.total_days - b.total_days,
-      width: 75
+      width: 100
     },
     {
       title: "Working",

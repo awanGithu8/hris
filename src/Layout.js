@@ -158,7 +158,7 @@ function Layout(props) {
                 }
               >
                 <Menu.Item key="report_permit">
-                  <NavLink to="/">
+                  <NavLink to="/report">
                     <Icon type="pie-chart" theme="twoTone" /> Permit Report
                   </NavLink>
                 </Menu.Item>

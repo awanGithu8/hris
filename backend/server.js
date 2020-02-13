@@ -23,7 +23,9 @@ const jobTitleRoute         = require('./apis/job_title');
 const cutiRoute             = require('./apis/cuti');
 const loginRoute            = require('./apis/login');
 const specialPermitRoute    = require('./apis/special_permit');
-const dataRoute              = require('./apis/data');
+const dataRoute             = require('./apis/data');
+const reportRoute             = require('./apis/report');
+
 
 app.use('/api', userRoute);
 app.use('/api', divisionRoute);
@@ -32,6 +34,8 @@ app.use('/api', cutiRoute);
 app.use('/api', loginRoute);
 app.use('/api', specialPermitRoute);
 app.use('/api', dataRoute);
+app.use('/api', reportRoute);
+
 /* End Setup Routes */
 
 // this is our MongoDB database
