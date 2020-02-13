@@ -41,7 +41,8 @@ function RequestCutiForm({ form }) {
   const [type, setType] = useState("Annual Leave");
 
   let working_date = addWorkDays(moment().toDate(), permitTotal); // Tue Nov 29 2016 00:00:00 GMT+0000 (GMT Standard Time)
-  let currentMonth = ("0" + working_date.getMonth()).slice(-2);
+  let currentMonth = ("0" + (working_date.getMonth() + 1)).slice(-2);
+
   let currentDate = ("0" + working_date.getDate()).slice(-2);
   let working_date_format =
     currentDate + "-" + currentMonth + "-" + working_date.getFullYear();
@@ -186,7 +187,9 @@ function RequestCutiForm({ form }) {
     let working_date = addWorkDays(dates[0].toDate(), permit_total); // Tue Nov 29 2016 00:00:00 GMT+0000 (GMT Standard Time)
 
     let date = ("0" + working_date.getDate()).slice(-2);
-    let month = ("0" + working_date.getMonth()).slice(-2);
+    let month = ("0" + (working_date.getMonth() + 1)).slice(-2);
+
+
 
     let working_date_format =
       date + "-" + month + "-" + working_date.getFullYear();
@@ -449,7 +452,7 @@ function RequestCutiForm({ form }) {
             </Form.Item>
           </Col>
           <Col span={3}>
-            <b>
+            <b style={{marginLeft: "2em"}}>
               <i>Total: {permitTotal} Days</i>
             </b>
           </Col>

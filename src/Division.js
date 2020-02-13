@@ -133,10 +133,6 @@ function Division({ form }) {
           // Add New Data
           axios.post(BACKEND_URL + "addDivision", values);
         } else {
-          console.log({
-            id: modalData["_id"],
-            update: values
-          });
           axios.post(BACKEND_URL + "updateDivision", {
             id: modalData["_id"],
             update: values

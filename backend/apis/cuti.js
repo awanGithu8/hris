@@ -2,6 +2,7 @@ const express   = require('express');
 const router    = express.Router();
 
 const Cuti  = require("../schemas/cuti");
+const User  = require("../schemas/user");
 
 
 /* API Cuti */

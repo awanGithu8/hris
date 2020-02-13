@@ -102,11 +102,10 @@ function Cuti() {
   }
 
   function searchData(e) {
-    console.log(e.target.value);
-    console.log(data);
     let dataFilter = data.filter(function (d) {
+      let name = dataUser[d.user_id] ? dataUser[d.user_id].name : "";
       return (
-        d.description.toLowerCase().includes(e.target.value.toLowerCase())
+        name.toLowerCase().includes(e.target.value.toLowerCase())
       )
     })
     setdataSource(dataFilter);

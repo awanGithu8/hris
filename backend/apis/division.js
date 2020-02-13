@@ -2,6 +2,7 @@ const express   = require('express');
 const router    = express.Router();
 
 const Division  = require("../schemas/division");
+const User      = require("../schemas/user");
 
 /* API Division */
 router.get("/listDivision", (req, res) => {
