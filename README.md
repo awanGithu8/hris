@@ -1,68 +1,123 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+# Permit Application Documentation
 
-## Available Scripts
+Client & Server & API Documentation
 
-In the project directory, you can run:
+# Github Source Code
 
-### `npm start`
+    https://github.com/onesinus/hris
 
-Runs the app in the development mode.<br>
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+# Link Demo
+    Back-End Base URL: https://hris-backend.herokuapp.com/api/
+    Front-End: http://sindata.herokuapp.com
 
-The page will reload if you make edits.<br>
-You will also see any lint errors in the console.
 
-### `npm test`
+# Client & Server Documentation
 
-Launches the test runner in the interactive watch mode.<br>
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## Client
 
-### `npm run build`
+    Tools: React JS + Ant Design
 
-Builds the app for production to the `build` folder.<br>
-It correctly bundles React in production mode and optimizes the build for the best performance.
+### Dependencies 
+|   Package Name                |   Version     |
+| ---------------               | ------------  |
+|  antd                         | ^3.26.6       |
+|  axios                        | ^0.19.0       |
+|  chart.js                     | ^2.9.3        |
+|  emailjs-com                  | ^2.4.1        |
+|  react                        | ^16.12.0      |
+|  react-chartjs-2              | ^2.9.0        |
+|  react-dom                    | ^16.12.0      |
+|  react-router-dom             | ^5.1.2        |
+|  react-scripts                | ^3.3.0        |
 
-The build is minified and the filenames include the hashes.<br>
-Your app is ready to be deployed!
+### Default Port
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+    3000
 
-### `npm run eject`
+### Running Client
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+    npm start (jalankan di root folder & pastikan sudah menjalankan npm install untuk pertama kali)
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
 
-Instead, it will copy all the configuration files and the transitive dependencies (Webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+## Server
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+    Tools: Express + Mongoose
 
-## Learn More
+### Dependencies 
+|   Package Name    |   Version     |
+| ---------------   | ------------  |
+|  cors             | ^2.8.5        |
+|  body-parser      | ^1.19.0       |
+|  express          | 4.17.1        |
+|  mongoose         | ^5.7.1        |
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
 
-To learn React, check out the [React documentation](https://reactjs.org/).
 
-### Code Splitting
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/code-splitting
+### Default Port
 
-### Analyzing the Bundle Size
+    3001
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size
 
-### Making a Progressive Web App
+### Running Server
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app
+    npm start (jalankan difolder backend & pastikan sudah menjalankan npm install untuk pertama kali)
 
-### Advanced Configuration
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/advanced-configuration
+# API Documentation
 
-### Deployment
+## Base Url: http://localhost:3001/api
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/deployment
+## Users
 
-### `npm run build` fails to minify
+| Url                   | Method    |   Description |
+| -----------------     | --------- | ------------- |
+| /checkUserLogin       | POST      | Verifikasi untuk melakukan cek terhadap user yang ingin login
+| /userLoggedIn         | POST      | Menandakan user telah berhasil login
+| /userLoggedOut        | POST      | Menandakan user telah berhasil logout
+| /getData              | GET       | Mendapatkan semua list user yang ada didatabase
+| /putData              | POST      | Menambahkan user ke database
+| /updateData           | POST      | Mengubah data user
+| /deleteData           | DELETE    | Menghapus data user dari database
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify
+## Divisions
+
+| Url                   | Method    |   Description |
+| -----------------     | --------- | ------------- |
+| /listDivision         | GET       | Mendapatkan semua list divisi yang ada didatabase
+| /addDivision          | POST      | Menambahkan divisi ke database
+| /updateDivision       | POST      | Mengubah data divisi
+| /deleteDivision       | DELETE    | Menghapus data divisi dari database
+| /listApprover         | GET       | Mendapatkan data user yang role-nya sebagai approver
+
+
+## Job Title
+
+| Url                   | Method    |   Description |
+| -----------------     | --------- | ------------- |
+| /listJobTitle         | GET       | Mendapatkan semua list job title yang ada didatabase
+| /addJobTitle          | POST      | Menambahkan job title ke database
+| /updateJobTitle       | POST      | Mengubah data job title
+| /deleteJobTitle       | DELETE    | Menghapus data job title dari database
+
+## Special Permit
+
+| Url                   | Method    |   Description |
+| -----------------     | --------- | ------------- |
+| /listSpecialPermit    | GET       | Mendapatkan semua list job cuti khusus yang ada didatabase
+| /addSpecialPermit     | POST      | Menambahkan job cuti khusus ke database
+| /updateSpecialPermit  | POST      | Mengubah data job cuti khusus
+| /deleteSpecialPermit  | DELETE    | Menghapus data job cuti khusus dari database
+
+## Request Cuti, Approval
+
+| Url                   | Method    |   Description |
+| -----------------     | --------- | ------------- |
+| /listCuti             | GET       | Mendapatkan semua list cuti  yang ada didatabase
+| /listCutiUser         | POST      | Mendapatkan list cuti yang dimiliki masing-masing user
+| /listApproval         | POST      | Mendapatkan list cuti yang harus diapprove oleh setiap approver
+| /listApprovalAll      | POST      | Mendapatkan semua list cuti yang belum diapprove
+| /addCuti              | POST      | Menambahkan data cuti ke database
+| /approveCuti          | POST      | Menyetujui cuti
+| /rejectCuti           | POST      | Menolak cuti
+| /deleteCuti           | GET       | Menghapus cuti
